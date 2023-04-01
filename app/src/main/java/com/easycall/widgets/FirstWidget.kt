@@ -18,6 +18,8 @@ private const val MY_ACTION = "MY_ACTION"
 
 class FirstWidget : AppWidgetProvider() {
 
+
+
     private val scope = CoroutineScope(Dispatchers.IO)
 
     override fun onReceive(context: Context, intent: Intent) {

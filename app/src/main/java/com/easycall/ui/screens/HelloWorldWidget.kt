@@ -1,23 +1,26 @@
 package com.easycall.ui.screens
-
+import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.glance.LocalContext
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.text.Text
 
-/**
- * Building a -basic- Glance widget involves the following:
- * - Creating the widget, which extends [GlanceAppWidget].
- * - Creating the widget provider, which extends [GlanceAppWidgetReceiver].
- * - Defining the widget's metadata in `res/xml`.
- * - Registering the widget provider in `AndroidManifest.xml`.
- */
+
 class HelloWorldWidget : GlanceAppWidget() {
 
     @Composable
     override fun Content() {
-        Text(text = "Hello world!")
+        val context = LocalContext.current
+        val appContext = context.applicationContext
+        val sharedPrefs = appContext.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val title = sharedPrefs.getString("FirstWidgetName", null)
+
+        if (title != null) {
+            Text(text = title)
+        }
     }
+
 }
 
 class HelloWorldWidgetReceiver : GlanceAppWidgetReceiver() {
