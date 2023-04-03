@@ -28,16 +28,13 @@ import com.easycall.R
 import com.easycall.ui.theme.EasyCallTheme
 
 @Composable
-fun CallWidget(
-
+fun MainScreen(
     // onSubmit: (name: String, phoneNumber: String) -> Unit
 ) {
     val phoneNumber = remember { mutableStateOf("") }
     val name = remember { mutableStateOf("") }
     var isClicked by remember { mutableStateOf(false) }
     val context = LocalContext.current
-
-
 
     EasyCallTheme() {
         Image(
@@ -141,9 +138,10 @@ fun CallWidget(
             val appContext = context.applicationContext
             val sharedPrefs = appContext.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
             val title = sharedPrefs.getString("FirstWidgetName", null)
+            val phone = sharedPrefs.getString("Phone",null)
 
             if (title != null) {
-                Text(title)
+                Text(title + phone)
             }
 
             Button(
@@ -151,9 +149,9 @@ fun CallWidget(
                     isClicked = true
 
                     //===save name for first widget share preferences
-                    val sharedPrefs = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
                     val editor = sharedPrefs.edit()
                     editor.putString("FirstWidgetName", name.value)
+                    editor.putString("Phone",phoneNumber.value)
                     editor.apply()
                     //====
                 },
