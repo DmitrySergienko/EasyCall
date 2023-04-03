@@ -1,11 +1,11 @@
 package com.easycall
 
-import android.os.Build
+import android.Manifest
 import android.os.Bundle
-import android.view.View
-import android.view.WindowInsetsController
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -17,16 +17,26 @@ import com.easycall.ui.screens.MainScreen
 
 class MainActivity : ComponentActivity() {
 
+    //permission request
+    private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            MyApp {
-                MainScreen()
+
+        //permission request
+        permissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) {
+            // permission granted launch code
+            setContent {
+                MyApp {
+                    MainScreen()
+                }
             }
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+
+     /*   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.setSystemBarsAppearance(
                 WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
                 WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
@@ -34,9 +44,15 @@ class MainActivity : ComponentActivity() {
         } else {
             @Suppress("DEPRECATION")
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        }
+        }*/
 
         window.statusBarColor = Color.Transparent.toArgb()
+
+        permissionLauncher.launch(
+            arrayOf(
+                Manifest.permission.CALL_PHONE,
+            )
+        )
     }
 }
 

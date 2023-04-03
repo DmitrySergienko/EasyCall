@@ -19,6 +19,7 @@ import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.layout.Column
+import androidx.glance.layout.Row
 import androidx.glance.layout.padding
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
@@ -39,22 +40,22 @@ class ActionWidget : GlanceAppWidget() {
                 .padding(8.dp)
 
         ) {
-            if (widgetName != null) {
-                Button(
-                    text = widgetName,
-                    style = TextStyle(
-                        color = ColorProvider(Color.White),
-                        fontSize = 24.sp,
-                    ),
-                    maxLines = 1,
+            Row() {
+                if (widgetName != null) {
+                    Button(
+                        text = widgetName,
+                        style = TextStyle(
+                            color = ColorProvider(Color.White),
+                            fontSize = 24.sp,
+                        ),
 
-                    onClick = actionRunCallback<LogActionCallback>(
-                        parameters = actionParametersOf(
-                            actionWidgetKey to "log event"
-                        )
-                    ),
-
+                        onClick = actionRunCallback<LogActionCallback>(
+                            parameters = actionParametersOf(
+                                actionWidgetKey to "log event"
+                            )
+                        ),
                     )
+                }
             }
         }
     }
