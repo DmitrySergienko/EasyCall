@@ -4,7 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.glance.Button
 import androidx.glance.GlanceId
@@ -18,6 +20,8 @@ import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.layout.Column
 import androidx.glance.layout.padding
+import androidx.glance.text.TextStyle
+import androidx.glance.unit.ColorProvider
 
 
 internal val actionWidgetKey = ActionParameters.Key<String>("action-widget-key")
@@ -31,17 +35,26 @@ class ActionWidget : GlanceAppWidget() {
         val sharedPrefs = appContext.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
         val widgetName = sharedPrefs.getString("FirstWidgetName", null)
         Column(
-            modifier = GlanceModifier.padding(8.dp)
+            modifier = GlanceModifier
+                .padding(8.dp)
+
         ) {
             if (widgetName != null) {
                 Button(
                     text = widgetName,
+                    style = TextStyle(
+                        color = ColorProvider(Color.White),
+                        fontSize = 24.sp,
+                    ),
+                    maxLines = 1,
+
                     onClick = actionRunCallback<LogActionCallback>(
                         parameters = actionParametersOf(
                             actionWidgetKey to "log event"
                         )
+                    ),
+
                     )
-                )
             }
         }
     }
