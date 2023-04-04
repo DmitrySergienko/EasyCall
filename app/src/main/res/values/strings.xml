@@ -17,5 +17,13 @@
     <string name="remote_view_text_label">Remote text view</string>
     <string name="remote_view_button_label">Click me!</string>
     <string name="remote_view_button_on_click_message">Clicked remote button</string>
+    <string name="accept">Accept</string>
+    <string name="no">No</string>
+    <string name="edit">Edit</string>
+    <string name="ok">OK</string>
+    <string name="message_widget_ready">Your widget is ready. Please install the widget on the main screen. Don\'t forget to delete the previous one!</string>
+    <string name="stay_here">Stay here</string>
+    <string name="go_to_main_screen">To main screen</string>
+    <string name="first_widget_title">Enter contact information for first widget</string>
 
 </resources>

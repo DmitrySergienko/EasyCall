@@ -2,18 +2,33 @@ package com.easycall
 
 import android.Manifest
 import android.os.Bundle
+import android.provider.ContactsContract
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.easycall.data.Contact
 import com.easycall.ui.screens.MainScreen
+import com.easycall.ui.theme.EasyCallTheme
+
+private const val MY_TAG ="VVV"
 
 class MainActivity : ComponentActivity() {
 
@@ -29,28 +44,60 @@ class MainActivity : ComponentActivity() {
         ) {
             // permission granted launch code
             setContent {
+
+
+                // retrieve the list of contacts:
+                val contacts = mutableListOf<Contact>()
+
+                val cursor = contentResolver.query(
+                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                    null,
+                    null,
+                    null,
+                    ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
+                )
+
+                val nameIndex = cursor?.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
+                val phoneNumberIndex = cursor?.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+
+                if (cursor != null) {
+                    while (cursor.moveToNext()) {
+                        val name = if (nameIndex!! >= 0) cursor.getString(nameIndex) else ""
+                        val phoneNumber = if (phoneNumberIndex!! >= 0) cursor.getString(phoneNumberIndex) else ""
+                        contacts.add(Contact(name, phoneNumber))
+                    }
+                }
+                Log.d(MY_TAG, "contacts: $contacts")
+                cursor?.close()
+
+
+
                 MyApp {
-                    MainScreen()
+                    EasyCallTheme() {
+                        Image(
+                            painter = painterResource(R.drawable.ic_background),
+                            contentDescription = "imageBack",
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .alpha(0.7f),
+                            contentScale = ContentScale.FillBounds
+                        )
+                        Column() {
+                            MainScreen(stringResource(id = R.string.first_widget_title), contacts)
+                            Divider(color = Color.White, thickness = 1.dp, modifier = Modifier.padding(10.dp))
+                        }
+                    }
                 }
             }
         }
 
-
-     /*   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.setSystemBarsAppearance(
-                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
-                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-            )
-        } else {
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        }*/
 
         window.statusBarColor = Color.Transparent.toArgb()
 
         permissionLauncher.launch(
             arrayOf(
                 Manifest.permission.CALL_PHONE,
+                Manifest.permission.READ_CONTACTS
             )
         )
     }
