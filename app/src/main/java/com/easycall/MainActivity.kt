@@ -2,8 +2,6 @@ package com.easycall
 
 import android.Manifest
 import android.os.Bundle
-import android.provider.ContactsContract
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
@@ -24,9 +22,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.easycall.data.Contact
 import com.easycall.ui.screens.MainScreen
 import com.easycall.ui.theme.EasyCallTheme
+
 
 private const val MY_TAG ="VVV"
 
@@ -45,33 +43,6 @@ class MainActivity : ComponentActivity() {
             // permission granted launch code
             setContent {
 
-
-                // retrieve the list of contacts:
-                val contacts = mutableListOf<Contact>()
-
-                val cursor = contentResolver.query(
-                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                    null,
-                    null,
-                    null,
-                    ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
-                )
-
-                val nameIndex = cursor?.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
-                val phoneNumberIndex = cursor?.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
-
-                if (cursor != null) {
-                    while (cursor.moveToNext()) {
-                        val name = if (nameIndex!! >= 0) cursor.getString(nameIndex) else ""
-                        val phoneNumber = if (phoneNumberIndex!! >= 0) cursor.getString(phoneNumberIndex) else ""
-                        contacts.add(Contact(name, phoneNumber))
-                    }
-                }
-                Log.d(MY_TAG, "contacts: $contacts")
-                cursor?.close()
-
-
-
                 MyApp {
                     EasyCallTheme() {
                         Image(
@@ -83,7 +54,7 @@ class MainActivity : ComponentActivity() {
                             contentScale = ContentScale.FillBounds
                         )
                         Column() {
-                            MainScreen(stringResource(id = R.string.first_widget_title), contacts)
+                            MainScreen(stringResource(id = R.string.first_widget_title))
                             Divider(color = Color.White, thickness = 1.dp, modifier = Modifier.padding(10.dp))
                         }
                     }

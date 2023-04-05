@@ -5,8 +5,10 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.*
@@ -15,21 +17,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.easycall.R
-import com.easycall.data.Contact
 import com.easycall.ui.ContactList
 import com.easycall.ui.screens.utils.CustomInfoButton
+import com.easycall.ui.screens.utils.CustomTextField
+
 
 @Composable
+
 fun MainScreen(
     title: String,
-    contact:List<Contact>
 ) {
     val phoneNumber = remember { mutableStateOf("") }
     val name = remember { mutableStateOf("") }
@@ -39,6 +40,8 @@ fun MainScreen(
     val sharedPrefs = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
     val widgetName = sharedPrefs.getString("FirstWidgetName", null)
     val widgetPhone = sharedPrefs.getString("Phone", null)
+
+
 
 
     if (widgetName != null) {
@@ -61,74 +64,12 @@ fun MainScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        OutlinedTextField(
-            value = name.value,
-            onValueChange = { name.value = it.take(15) },
-            placeholder = {
-                if (widgetName != null) {
-                    Text(widgetName, color = Color.White)
-                }
-            },
-            label = {
-                if (widgetName != null) {
-                    Text(
-                        widgetName, fontSize = 18.sp,
-                        color = Color.White
-                    )
-                } else {
-                    Text(
-                        "Name (max 15 characters)",
-                        fontSize = 18.sp,
-                        color = Color.White
-                    )
-                }
-
-            },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
-            textStyle = TextStyle(
-                color = MaterialTheme.colors.primary,
-                fontSize = 20.sp
-            ),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Text
-            )
-        )
+        CustomTextField(widgetName = widgetName, name = name,"Name (max 15 characters)" )
 
         Spacer(modifier = Modifier.height(16.dp))
-        OutlinedTextField(
-            value = phoneNumber.value,
-            onValueChange = { phoneNumber.value = it.take(15) },
-            placeholder = {
-                if (widgetPhone != null) {
-                    Text(widgetPhone, color = Color.White)
-                }
-            },
-            label = {
-                if (widgetPhone != null) {
-                    Text(
-                        widgetPhone, fontSize = 18.sp,
-                        color = Color.White
-                    )
 
-                } else {
-                    Text(
-                        "Phone Number",
-                        fontSize = 18.sp,
-                        color = Color.White
-                    )
-                }
-            },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
-            textStyle = TextStyle(
-                color = MaterialTheme.colors.primary,
-                fontSize = 20.sp
-            ),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Phone
-            )
-        )
+        CustomTextField(widgetName = widgetPhone, name = phoneNumber,"Phone Number" )
+
         Spacer(modifier = Modifier.height(32.dp))
 
         //share preferences
@@ -211,7 +152,7 @@ fun MainScreen(
             },
             icon = painterResource(id = R.drawable.baseline_edit_note_24)
         )
-        ContactList(contact)
+        ContactList()
 
     }
 }
