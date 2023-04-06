@@ -18,13 +18,14 @@ import androidx.compose.ui.unit.sp
 fun CustomTextField(
     widgetName:String?,
     name: MutableState<String>,
-    lable: String,
+    label: String,
 
 ){
 
     OutlinedTextField(
+
         value = name.value,
-        onValueChange = { name.value = it.take(15) },
+        onValueChange = {name.value = it.take(15) },
         placeholder = {
             if (widgetName != null) {
                 Text(widgetName, color = Color.White)
@@ -38,7 +39,7 @@ fun CustomTextField(
                 )
             } else {
                 Text(
-                    lable,
+                    label,
                     fontSize = 18.sp,
                     color = Color.White
                 )

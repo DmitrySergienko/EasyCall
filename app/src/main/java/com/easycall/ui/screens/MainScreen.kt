@@ -22,6 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.easycall.R
+import com.easycall.data.Contact
 import com.easycall.ui.ContactList
 import com.easycall.ui.screens.utils.CustomInfoButton
 import com.easycall.ui.screens.utils.CustomTextField
@@ -33,7 +34,7 @@ fun MainScreen(
     title: String,
 ) {
     val phoneNumber = remember { mutableStateOf("") }
-    val name = remember { mutableStateOf("") }
+    val userName = remember { mutableStateOf("") }
     var isClicked by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
@@ -41,8 +42,7 @@ fun MainScreen(
     val widgetName = sharedPrefs.getString("FirstWidgetName", null)
     val widgetPhone = sharedPrefs.getString("Phone", null)
 
-
-
+    val selectedItem by remember { mutableStateOf<Contact?>(Contact("default","default")) }
 
     if (widgetName != null) {
         isClicked = true
@@ -64,11 +64,19 @@ fun MainScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        CustomTextField(widgetName = widgetName, name = name,"Name (max 15 characters)" )
+        selectedItem?.let {
+            CustomTextField(
+                widgetName = widgetName,
+                name = userName,
+                "Name (max 15 characters)" ) }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        CustomTextField(widgetName = widgetPhone, name = phoneNumber,"Phone Number" )
+        selectedItem?.let {
+            CustomTextField(
+                widgetName = widgetPhone,
+                name = phoneNumber,
+                "Phone Number" )}
 
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -78,18 +86,18 @@ fun MainScreen(
 
         Button(
             onClick = {
-                if ((name.value.isNotEmpty()) && (phoneNumber.value.isNotEmpty())) {
+                if ((userName.value.isNotEmpty()) && (phoneNumber.value.isNotEmpty())) {
 
                 isClicked = true
 
                 //alert dialog confirm save contact
                 val addInfoDialog = android.app.AlertDialog.Builder(context)
-                    .setMessage("Confirm save Name: ${name.value}" + "\n" + "Phone: ${phoneNumber.value}")
+                    .setMessage("Confirm save Name: ${userName.value}" + "\n" + "Phone: ${phoneNumber.value}")
                     .setPositiveButton(R.string.accept) { _, _ ->
 
                         //===save name for first widget share preferences
                         val editor = sharedPrefs.edit()
-                        editor.putString("FirstWidgetName", name.value)
+                        editor.putString("FirstWidgetName", userName.value)
                         editor.putString("Phone", phoneNumber.value)
                         editor.apply()
                         //====
@@ -114,7 +122,6 @@ fun MainScreen(
                     Toast.makeText(context, "Complete both fields!", Toast.LENGTH_LONG).show()
                 }
     },
-
             modifier = Modifier
                 .padding(20.dp)
                 .fillMaxWidth(),
@@ -152,7 +159,13 @@ fun MainScreen(
             },
             icon = painterResource(id = R.drawable.baseline_edit_note_24)
         )
-        ContactList()
+        ContactList(){clickedItem ->
 
+            if(selectedItem != null){
+                // selectedItem = clickedItem
+                userName.value = clickedItem.name
+                phoneNumber.value = clickedItem.phoneNumber
+            }
+        }
     }
 }

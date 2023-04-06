@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">EasyCall</string>
+    <string name="app_name">QuickCall Widget</string>
 
     <string name="widget_hello_world_description">Hello World</string>
     <string name="widget_action_description">Actions</string>
@@ -24,6 +24,6 @@
     <string name="message_widget_ready">Your widget is ready. Please install the widget on the main screen. Don\'t forget to delete the previous one!</string>
     <string name="stay_here">Stay here</string>
     <string name="go_to_main_screen">To main screen</string>
-    <string name="first_widget_title">Enter contact information for first widget</string>
+    <string name="first_widget_title">Enter contact information for your widget</string>
 
 </resources>

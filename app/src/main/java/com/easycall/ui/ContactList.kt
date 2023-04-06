@@ -1,6 +1,5 @@
 package com.easycall.ui
 
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,30 +14,24 @@ import androidx.compose.ui.unit.dp
 import com.easycall.data.Contact
 
 @Composable
-fun ContactList() {
+fun ContactList(onItemClicked: (Contact) -> Unit) {
 
     val context =  LocalContext.current
     val getContactList = GetContacts(context)
 
     val contacts = getContactList.contacts
 
-    var selectedItem by remember { mutableStateOf<Contact?>(null) }
 
     LazyColumn {
         items(contacts) { contact ->
 
             ContactItem(contact){clickedItem ->
-                selectedItem = clickedItem
-                Toast.makeText(context, contact.name, Toast.LENGTH_SHORT).show()
+                onItemClicked(clickedItem)
+               // Toast.makeText(context, contact.name, Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    if (selectedItem != null) {
-        /*CustomTextField(
-            selectedItem!!
-        )*/
-    }
 }
 
 @Composable
