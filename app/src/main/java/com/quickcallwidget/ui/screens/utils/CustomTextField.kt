@@ -1,4 +1,4 @@
-package com.easycall.ui.screens.utils
+package com.quickcallwidget.ui.screens.utils
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
@@ -17,15 +17,14 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun CustomTextField(
     widgetName:String?,
-    name: MutableState<String>,
+    text: MutableState<String>,
     label: String,
-
-){
+    ){
 
     OutlinedTextField(
 
-        value = name.value,
-        onValueChange = {name.value = it.take(15) },
+        value = text.value,
+        onValueChange = {text.value = it.take(15) },
         placeholder = {
             if (widgetName != null) {
                 Text(widgetName, color = Color.White)
@@ -44,8 +43,8 @@ fun CustomTextField(
                     color = Color.White
                 )
             }
-
         },
+
         singleLine = true,
         modifier = Modifier.fillMaxWidth(),
         textStyle = TextStyle(

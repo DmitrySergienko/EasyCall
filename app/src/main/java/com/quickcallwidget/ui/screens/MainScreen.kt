@@ -1,4 +1,4 @@
-package com.easycall.ui.screens
+package com.quickcallwidget.ui.screens
 
 import android.app.Activity
 import android.content.Context
@@ -21,11 +21,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.easycall.R
-import com.easycall.data.Contact
-import com.easycall.ui.ContactList
-import com.easycall.ui.screens.utils.CustomInfoButton
-import com.easycall.ui.screens.utils.CustomTextField
+import com.quickcallwidget.R
+import com.quickcallwidget.data.Contact
+import com.quickcallwidget.ui.ContactList
+import com.quickcallwidget.ui.screens.utils.CustomInfoButton
+import com.quickcallwidget.ui.screens.utils.CustomTextField
+
 
 
 @Composable
@@ -67,16 +68,16 @@ fun MainScreen(
         selectedItem?.let {
             CustomTextField(
                 widgetName = widgetName,
-                name = userName,
-                "Name (max 15 characters)" ) }
+                text = userName,
+                label = "Name (max 15 characters)" ) }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         selectedItem?.let {
             CustomTextField(
                 widgetName = widgetPhone,
-                name = phoneNumber,
-                "Phone Number" )}
+                text = phoneNumber,
+                label = "Phone Number" )}
 
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -145,7 +146,6 @@ fun MainScreen(
                     color = if (!isClicked) Color.White else Color.Black,
                     fontSize = 20.sp
                 )
-
         }
     }
         CustomInfoButton(
@@ -159,7 +159,7 @@ fun MainScreen(
             },
             icon = painterResource(id = R.drawable.baseline_edit_note_24)
         )
-        ContactList(){clickedItem ->
+        ContactList(userName){clickedItem ->
 
             if(selectedItem != null){
                 // selectedItem = clickedItem

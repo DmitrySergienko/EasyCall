@@ -5,15 +5,15 @@ plugins {
 }
 
 android {
-    namespace 'com.easycall'
+    namespace 'com.quickcallwidget'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.easycall"
+        applicationId "com.quickcallwidget"
         minSdk 26
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

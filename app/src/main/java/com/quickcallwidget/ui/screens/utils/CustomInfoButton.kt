@@ -1,4 +1,4 @@
-package com.easycall.ui.screens.utils
+package com.quickcallwidget.ui.screens.utils
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size

@@ -1,4 +1,4 @@
-package com.easycall.data
+package com.quickcallwidget.data
 
 
 data class Contact(

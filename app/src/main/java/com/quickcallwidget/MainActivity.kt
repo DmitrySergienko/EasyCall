@@ -1,4 +1,4 @@
-package com.easycall
+package com.quickcallwidget
 
 import android.Manifest
 import android.os.Bundle
@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
@@ -22,8 +22,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.easycall.ui.screens.MainScreen
-import com.easycall.ui.theme.EasyCallTheme
+import com.quickcallwidget.ui.screens.MainScreen
+import com.quickcallwidget.ui.theme.quickcallwidgetTheme
 
 
 class MainActivity : ComponentActivity() {
@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
             setContent {
 
                 MyApp {
-                    EasyCallTheme() {
+                    quickcallwidgetTheme() {
                         Image(
                             painter = painterResource(R.drawable.ic_background),
                             contentDescription = "imageBack",

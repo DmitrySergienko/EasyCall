@@ -1,4 +1,4 @@
-package com.easycall.ui.theme
+package com.quickcallwidget.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes

@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "EasyCall"
+rootProject.name = "quickcallwidget"
 include ':app'

@@ -1,8 +1,8 @@
-package com.easycall.ui
+package com.quickcallwidget.ui
 
 import android.content.Context
 import android.provider.ContactsContract
-import com.easycall.data.Contact
+import com.quickcallwidget.data.Contact
 
 class GetContacts(context: Context) {
 

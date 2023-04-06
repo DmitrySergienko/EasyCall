@@ -1,4 +1,4 @@
-package com.easycall.ui.screens
+package com.quickcallwidget.ui.screens
 
 import android.content.Context
 import android.content.Intent

@@ -13,13 +13,12 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.EasyCall"
+        android:theme="@style/Theme.quickcallwidget"
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.EasyCall">
+            android:theme="@style/Theme.quickcallwidget">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,7 +27,7 @@
         </activity>
 
         <receiver
-            android:name=".ui.screens.ActionWidgetReceiver"
+            android:name="com.quickcallwidget.ui.screens.ActionWidgetReceiver"
             android:enabled="true"
             android:exported="false">
 
