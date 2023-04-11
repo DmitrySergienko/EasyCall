@@ -1,7 +1,6 @@
 package com.quickcallwidget.ui.screens
 
 import android.app.Activity
-import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -151,17 +150,36 @@ fun MainScreen(
                 )
         }
     }
-        CustomInfoButton(
-            text = stringResource(R.string.edit),
-            onClick = {
-                isClicked = false
-                val editor = sharedPrefs.edit()
-                editor.remove("FirstWidgetName")
-                editor.remove("Phone")
-                editor.apply()
-            },
-            icon = painterResource(id = R.drawable.baseline_edit_note_24)
-        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            CustomInfoButton(
+                text = stringResource(R.string.edit),
+                onClick = {
+                    isClicked = false
+                    val editor = sharedPrefs.edit()
+                    editor.remove("FirstWidgetName")
+                    editor.remove("Phone")
+                    editor.apply()
+                },
+                icon = painterResource(id = R.drawable.baseline_edit_note_24)
+            )
+            CustomInfoButton(
+                text = stringResource(id = R.string.info),
+                onClick = {
+                    val addInfoDialog = android.app.AlertDialog.Builder(context)
+                        .setMessage(R.string.how_to_add_widget)
+                        .setPositiveButton(R.string.ok) { _, _ ->
+                           //stay same plase
+                        }.create()
+                    addInfoDialog.show()
+                          },
+                icon =painterResource(id = R.drawable.baseline_info_24)
+            )
+        }
+
         ContactList(userName){clickedItem ->
 
             if(selectedItem != null){
