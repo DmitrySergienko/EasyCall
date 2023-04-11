@@ -1,6 +1,7 @@
 package com.quickcallwidget.ui.screens
 
 import android.app.Activity
+import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -18,6 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -26,8 +28,6 @@ import com.quickcallwidget.data.Contact
 import com.quickcallwidget.ui.ContactList
 import com.quickcallwidget.ui.screens.utils.CustomInfoButton
 import com.quickcallwidget.ui.screens.utils.CustomTextField
-
-
 
 @Composable
 
@@ -69,7 +69,8 @@ fun MainScreen(
             CustomTextField(
                 widgetName = widgetName,
                 text = userName,
-                label = "Name (max 15 characters)" ) }
+                label = "Name (max 15 characters)",
+                textType = KeyboardType.Text) }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -77,7 +78,9 @@ fun MainScreen(
             CustomTextField(
                 widgetName = widgetPhone,
                 text = phoneNumber,
-                label = "Phone Number" )}
+                label = "Phone Number",
+                textType = KeyboardType.Phone
+            )}
 
         Spacer(modifier = Modifier.height(32.dp))
 

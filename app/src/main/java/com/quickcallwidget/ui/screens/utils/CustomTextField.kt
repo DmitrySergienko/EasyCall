@@ -19,7 +19,8 @@ fun CustomTextField(
     widgetName:String?,
     text: MutableState<String>,
     label: String,
-    ){
+    textType: KeyboardType
+){
 
     OutlinedTextField(
 
@@ -52,7 +53,14 @@ fun CustomTextField(
             fontSize = 20.sp
         ),
         keyboardOptions = KeyboardOptions.Default.copy(
-            keyboardType = KeyboardType.Text
-        )
+            keyboardType = textType
+        ),
+       /* onFocusChanged = { focusState: FocusState ->
+            if (focusState.isFocused) {
+                // Move the cursor to the end of the text
+                text.value = text.value + " "
+                text.value = text.value.dropLast(1)
+            }
+        }*/
     )
 }
