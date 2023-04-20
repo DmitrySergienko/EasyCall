@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">QuickCall Widget</string>
+
+
+    <string name="widget_action_description">Действие</string>
+    <string name="widget_error_ui_description">Error UI</string>
+    <string name="widget_list_description">Список</string>
+    <string name="widget_stateful_description">Stateful</string>
+    <string name="widget_size_exact_description">Size mode - Exact</string>
+    <string name="widget_size_responsive_description">Size mode - Responsive</string>
+    <string name="widget_size_single_description">Size mode - Single</string>
+    <string name="widget_interop_description">Remote views interop</string>
+
+    <string name="error_ui_widget_error_message">Custom error message</string>
+    <string name="widget_initial_label_loading">Loading…</string>
+
+    <string name="remote_view_text_label">Remote text view</string>
+    <string name="remote_view_button_label">Нажми на меня!</string>
+    <string name="remote_view_button_on_click_message">Нажата удаленная кнопка</string>
+    <string name="accept">Подтвердить</string>
+    <string name="no">Нет</string>
+    <string name="edit">Изменить</string>
+    <string name="ok">OK</string>
+    <string name="message_widget_ready">Ваш виджет готов. \nПожалуйста, установите виджет на главный экран. Не забудьте удалить предыдущий!</string>
+    <string name="stay_here">Остаться в приложении</string>
+    <string name="go_to_main_screen">Выйти и установить виджет</string>
+    <string name="first_widget_title">Введите контактную информацию для вашего виджета</string>
+    <string name="info">Инструкция</string>
+    <string name="how_to_add_widget">Инструкция: как добавить виджет на главный экран\n\n1.Нажмите и удерживайте на пустое место на главном экране.\n2.Выберите \"Виджеты\" из появившегося списка вариантов.\n3.Прокрутите список доступных виджетов, пока не найдете виджет QuickCall.\n4.Нажмите и удерживайте виджет, чтобы взять его, затем переместите его на пустое место на главном экране.</string>
+
+
+    <string name="done">Готово</string>
+    <string name="submit">Подтвердить</string>
+    <string name="name_max">Имя (максимум 15 символов)</string>
+    <string name="phone">Номер телефона</string>
+    <string name="complete">Заполните оба поля!</string>
+    <string name="confirm">Подтвердить сохранение: </string>
+    <string name="phone_">Номер контакта: </string>
+
+</resources>

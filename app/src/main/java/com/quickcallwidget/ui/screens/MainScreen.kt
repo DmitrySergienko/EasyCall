@@ -68,7 +68,7 @@ fun MainScreen(
             CustomTextField(
                 widgetName = widgetName,
                 text = userName,
-                label = "Name (max 15 characters)",
+                label = stringResource(id = R.string.name_max),
                 textType = KeyboardType.Text) }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -77,7 +77,7 @@ fun MainScreen(
             CustomTextField(
                 widgetName = widgetPhone,
                 text = phoneNumber,
-                label = "Phone Number",
+                label = stringResource(id = R.string.phone),
                 textType = KeyboardType.Phone
             )}
 
@@ -95,7 +95,7 @@ fun MainScreen(
 
                 //alert dialog confirm save contact
                 val addInfoDialog = android.app.AlertDialog.Builder(context)
-                    .setMessage("Confirm save Name: ${userName.value}" + "\n" + "Phone: ${phoneNumber.value}")
+                    .setMessage(userName.value + "\n${phoneNumber.value}")
                     .setPositiveButton(R.string.accept) { _, _ ->
 
                         //===save name for first widget share preferences
@@ -122,7 +122,7 @@ fun MainScreen(
                 addInfoDialog.show()
             }
                 else {
-                    Toast.makeText(context, "Complete both fields!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, R.string.complete, Toast.LENGTH_LONG).show()
                 }
     },
             modifier = Modifier
@@ -144,7 +144,7 @@ fun MainScreen(
                     )
                 }
                 Text(
-                    text = if (isClicked) "Done" else "Submit",
+                    text = if (isClicked) stringResource(id = R.string.done) else stringResource(id = R.string.submit),
                     color = if (!isClicked) Color.White else Color.Black,
                     fontSize = 20.sp
                 )

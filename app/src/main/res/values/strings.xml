@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">QuickCall Widget</string>
 
-    <string name="widget_hello_world_description">Hello World</string>
+    <string name="widget_hello_world_description" translatable="false">Hello World</string>
     <string name="widget_action_description">Actions</string>
     <string name="widget_error_ui_description">Error UI</string>
     <string name="widget_list_description">List</string>
@@ -21,11 +21,18 @@
     <string name="no">No</string>
     <string name="edit">Edit</string>
     <string name="ok">OK</string>
-    <string name="message_widget_ready">Your widget is ready. Please install the widget on the main screen. Don\'t forget to delete the previous one!</string>
+    <string name="message_widget_ready">Your widget is ready. \nPlease install the widget on the main screen. Don\'t forget to delete the previous one!</string>
     <string name="stay_here">Stay here</string>
     <string name="go_to_main_screen">To main screen</string>
     <string name="first_widget_title">Enter contact information for your widget</string>
-    <string name="info">Info</string>
-    <string name="how_to_add_widget">Instruction\nHow add your widget to the home screen  \n\n1.Long press on an empty space on your home screen.\n2.Select \"Widgets\" from the list of options that appears.\n3.Scroll through the list of available widgets until you find QuickCall Widget.\n4.Tap and hold on your widget to pick it up, then drag it to an empty space on the home screen.</string>
+    <string name="info">Instruction</string>
+    <string name="how_to_add_widget">Instruction: how add your widget to the home screen  \n\n1.Long press on an empty space on your home screen.\n2.Select \"Widgets\" from the list of options that appears.\n3.Scroll through the list of available widgets until you find QuickCall Widget.\n4.Tap and hold on your widget to pick it up, then drag it to an empty space on the home screen.</string>
+    <string name="done">Done</string>
+    <string name="submit">Submit</string>
+    <string name="name_max">Name (max 15 characters)</string>
+    <string name="phone">Phone Number</string>
+    <string name="complete">Complete both fields!</string>
+    <string name="confirm">Confirm save Name: </string>
+    <string name="phone_">Phone: </string>
 
 </resources>
