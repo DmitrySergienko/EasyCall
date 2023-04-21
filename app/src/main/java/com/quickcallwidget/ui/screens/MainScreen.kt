@@ -1,7 +1,13 @@
 package com.quickcallwidget.ui.screens
 
 import android.app.Activity
+import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,7 +48,7 @@ fun MainScreen(
     val widgetName = sharedPrefs.getString("FirstWidgetName", null)
     val widgetPhone = sharedPrefs.getString("Phone", null)
 
-    val selectedItem by remember { mutableStateOf<Contact?>(Contact("default","default")) }
+    val selectedItem by remember { mutableStateOf<Contact?>(Contact("default", "default")) }
 
     if (widgetName != null) {
         isClicked = true
@@ -69,7 +75,9 @@ fun MainScreen(
                 widgetName = widgetName,
                 text = userName,
                 label = stringResource(id = R.string.name_max),
-                textType = KeyboardType.Text) }
+                textType = KeyboardType.Text
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -79,7 +87,8 @@ fun MainScreen(
                 text = phoneNumber,
                 label = stringResource(id = R.string.phone),
                 textType = KeyboardType.Phone
-            )}
+            )
+        }
 
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -91,40 +100,52 @@ fun MainScreen(
             onClick = {
                 if ((userName.value.isNotEmpty()) && (phoneNumber.value.isNotEmpty())) {
 
-                isClicked = true
+                    isClicked = true
 
-                //alert dialog confirm save contact
-                val addInfoDialog = android.app.AlertDialog.Builder(context)
-                    .setMessage(userName.value + "\n${phoneNumber.value}")
-                    .setPositiveButton(R.string.accept) { _, _ ->
+                    //alert dialog confirm save contact
+                    val addInfoDialog = android.app.AlertDialog.Builder(context)
+                        .setMessage(userName.value + "\n${phoneNumber.value}")
+                        .setPositiveButton(R.string.accept) { _, _ ->
 
-                        //===save name for first widget share preferences
-                        val editor = sharedPrefs.edit()
-                        editor.putString("FirstWidgetName", userName.value)
-                        editor.putString("Phone", phoneNumber.value)
-                        editor.apply()
-                        //====
-                        val addInfoDialog = android.app.AlertDialog.Builder(context)
-                            .setMessage(R.string.message_widget_ready)
-                            .setPositiveButton(R.string.go_to_main_screen) { _, _ ->
-                                val activity = (context as? Activity)
-                                activity?.finish()
+                            //===save name for first widget share preferences
+                            val editor = sharedPrefs.edit()
+                            editor.putString("FirstWidgetName", userName.value)
+                            editor.putString("Phone", phoneNumber.value)
+                            editor.apply()
+
+                            //Add widget to the main screen Alert
+                            val mAppWidgetManager = AppWidgetManager.getInstance(context)
+
+                            val myProvider = ComponentName(context, ActionWidgetReceiver::class.java)
+                            val b = Bundle()
+                            b.putString("123", "ggg")
+
+
+                            if (mAppWidgetManager.isRequestPinAppWidgetSupported) {
+                                val pinnedWidgetCallbackIntent = Intent(context, ActionWidgetReceiver::class.java)
+                                val successCallback = PendingIntent.getBroadcast( context,
+                                    0,pinnedWidgetCallbackIntent, FLAG_IMMUTABLE)
+                                mAppWidgetManager.requestPinAppWidget(myProvider,b,successCallback)
                             }
-                            .setNegativeButton(R.string.stay_here) { _, _ ->
-                                //stay on same fragment
-                            }.create()
-                        addInfoDialog.show()
-                    }
-                    .setNegativeButton(R.string.no) { _, _ ->
-                        //stay on same fragment
-                        isClicked = false
-                    }.create()
-                addInfoDialog.show()
-            }
-                else {
+
+                            //====
+                            val addInfoDialog = android.app.AlertDialog.Builder(context)
+                                .setMessage(R.string.message_widget_ready)
+                                .setPositiveButton(R.string.ok) { _, _ ->
+                                    val activity = (context as? Activity)
+                                    activity?.finish()
+                                }.create()
+                            addInfoDialog.show()
+                        }
+                        .setNegativeButton(R.string.no) { _, _ ->
+                            //stay on same fragment
+                            isClicked = false
+                        }.create()
+                    addInfoDialog.show()
+                } else {
                     Toast.makeText(context, R.string.complete, Toast.LENGTH_LONG).show()
                 }
-    },
+            },
             modifier = Modifier
                 .padding(20.dp)
                 .fillMaxWidth(),
@@ -148,8 +169,8 @@ fun MainScreen(
                     color = if (!isClicked) Color.White else Color.Black,
                     fontSize = 20.sp
                 )
+            }
         }
-    }
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -172,17 +193,17 @@ fun MainScreen(
                     val addInfoDialog = android.app.AlertDialog.Builder(context)
                         .setMessage(R.string.how_to_add_widget)
                         .setPositiveButton(R.string.ok) { _, _ ->
-                           //stay same plase
+                            //stay same plase
                         }.create()
                     addInfoDialog.show()
-                          },
-                icon =painterResource(id = R.drawable.baseline_info_24)
+                },
+                icon = painterResource(id = R.drawable.baseline_info_24)
             )
         }
 
-        ContactList(userName){clickedItem ->
+        ContactList(userName) { clickedItem ->
 
-            if(selectedItem != null){
+            if (selectedItem != null) {
                 // selectedItem = clickedItem
                 userName.value = clickedItem.name
                 phoneNumber.value = clickedItem.phoneNumber
