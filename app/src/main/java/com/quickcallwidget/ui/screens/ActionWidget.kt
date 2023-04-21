@@ -8,10 +8,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import androidx.glance.Button
-import androidx.glance.GlanceId
-import androidx.glance.GlanceModifier
-import androidx.glance.LocalContext
+import androidx.glance.*
 import androidx.glance.action.ActionParameters
 import androidx.glance.action.actionParametersOf
 import androidx.glance.appwidget.GlanceAppWidget
@@ -21,6 +18,7 @@ import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
 import androidx.glance.layout.padding
+import androidx.glance.text.FontWeight
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 
@@ -43,6 +41,8 @@ class ActionWidget : GlanceAppWidget() {
             Row() {
                 if (widgetName != null) {
                     Button(
+                        modifier = GlanceModifier
+                            .background(Color.Transparent),
                         text = widgetName,
                         style = TextStyle(
                             color = ColorProvider(Color.White),
@@ -50,9 +50,7 @@ class ActionWidget : GlanceAppWidget() {
                         ),
 
                         onClick = actionRunCallback<LogActionCallback>(
-                            parameters = actionParametersOf(
-                                actionWidgetKey to "log event"
-                            )
+                            parameters = actionParametersOf(actionWidgetKey to "log event")
                         ),
                     )
                 }
