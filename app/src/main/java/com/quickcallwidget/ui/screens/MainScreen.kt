@@ -1,13 +1,7 @@
 package com.quickcallwidget.ui.screens
 
 import android.app.Activity
-import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_IMMUTABLE
-import android.appwidget.AppWidgetManager
-import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
-import android.os.Bundle
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,9 +27,10 @@ import com.quickcallwidget.data.Contact
 import com.quickcallwidget.ui.ContactList
 import com.quickcallwidget.ui.screens.utils.CustomInfoButton
 import com.quickcallwidget.ui.screens.utils.CustomTextField
+import com.quickcallwidget.ui.screens.utils.fontFamily
+import com.quickcallwidget.ui.screens.utils.pinWidget
 
 @Composable
-
 fun MainScreen(
     title: String,
 ) {
@@ -57,14 +52,14 @@ fun MainScreen(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
     ) {
         Text(
             text = title,
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
+            fontSize = 22.sp,
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Medium,
             color = Color.White,
         )
 
@@ -94,7 +89,7 @@ fun MainScreen(
 
         //share preferences
         val appContext = context.applicationContext
-        val sharedPrefs = appContext.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val mySharedPrefs = appContext.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
 
         Button(
             onClick = {
@@ -108,25 +103,13 @@ fun MainScreen(
                         .setPositiveButton(R.string.accept) { _, _ ->
 
                             //===save name for first widget share preferences
-                            val editor = sharedPrefs.edit()
+                            val editor = mySharedPrefs.edit()
                             editor.putString("FirstWidgetName", userName.value)
                             editor.putString("Phone", phoneNumber.value)
                             editor.apply()
 
                             //Add widget to the main screen Alert
-                            val mAppWidgetManager = AppWidgetManager.getInstance(context)
-
-                            val myProvider = ComponentName(context, ActionWidgetReceiver::class.java)
-                            val b = Bundle()
-                            b.putString("123", "ggg")
-
-
-                            if (mAppWidgetManager.isRequestPinAppWidgetSupported) {
-                                val pinnedWidgetCallbackIntent = Intent(context, ActionWidgetReceiver::class.java)
-                                val successCallback = PendingIntent.getBroadcast( context,
-                                    0,pinnedWidgetCallbackIntent, FLAG_IMMUTABLE)
-                                mAppWidgetManager.requestPinAppWidget(myProvider,b,successCallback)
-                            }
+                            pinWidget(context)
 
                             //====
                             val addInfoDialog = android.app.AlertDialog.Builder(context)
@@ -165,13 +148,16 @@ fun MainScreen(
                     )
                 }
                 Text(
-                    text = if (isClicked) stringResource(id = R.string.done) else stringResource(id = R.string.submit),
+                    text = if (isClicked) stringResource(id = R.string.done) else stringResource(
+                        id = R.string.submit
+                    ),
                     color = if (!isClicked) Color.White else Color.Black,
-                    fontSize = 20.sp
+                    fontSize = 20.sp,
+                    fontFamily = fontFamily,
+                    fontWeight = FontWeight.Medium,
                 )
             }
         }
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -200,14 +186,19 @@ fun MainScreen(
                 icon = painterResource(id = R.drawable.baseline_info_24)
             )
         }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            ContactList(userName) { clickedItem ->
 
-        ContactList(userName) { clickedItem ->
-
-            if (selectedItem != null) {
-                // selectedItem = clickedItem
-                userName.value = clickedItem.name
-                phoneNumber.value = clickedItem.phoneNumber
+                if (selectedItem != null) {
+                    userName.value = clickedItem.name
+                    phoneNumber.value = clickedItem.phoneNumber
+                }
             }
+
         }
     }
 }
+

@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.quickcallwidget.data.Contact
+import com.quickcallwidget.ui.screens.utils.fontFamily
 
 @Composable
 fun ContactList(searchText:MutableState<String>, onItemClicked: (Contact) -> Unit) {
@@ -56,7 +57,11 @@ fun ContactItem(contact: Contact, onItemClick: (Contact) -> Unit) {
                 onItemClick(contact)
             }
     ) {
-        Text(text = contact.name, fontWeight = FontWeight.Bold, color = Color.White)
+        Text(
+            text = contact.name,
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Light,
+            color = Color.White)
         Spacer(modifier = Modifier.height(4.dp))
         Text(text = contact.phoneNumber, color = Color.White)
     }

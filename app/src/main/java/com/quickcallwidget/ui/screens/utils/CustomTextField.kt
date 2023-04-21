@@ -10,6 +10,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.sp
 
@@ -35,13 +36,17 @@ fun CustomTextField(
             if (widgetName != null) {
                 Text(
                     widgetName, fontSize = 18.sp,
-                    color = Color.White
+                    color = Color.White,
+                    fontFamily = fontFamily,
+                    fontWeight = FontWeight.Normal,
                 )
             } else {
                 Text(
                     label,
                     fontSize = 18.sp,
-                    color = Color.White
+                    color = Color.White,
+                    fontFamily = fontFamily,
+                    fontWeight = FontWeight.Normal,
                 )
             }
         },
@@ -55,12 +60,6 @@ fun CustomTextField(
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = textType
         ),
-       /* onFocusChanged = { focusState: FocusState ->
-            if (focusState.isFocused) {
-                // Move the cursor to the end of the text
-                text.value = text.value + " "
-                text.value = text.value.dropLast(1)
-            }
-        }*/
+
     )
 }
