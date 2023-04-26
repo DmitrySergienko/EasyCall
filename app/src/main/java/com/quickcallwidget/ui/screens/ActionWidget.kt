@@ -18,7 +18,6 @@ import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
 import androidx.glance.layout.padding
-import androidx.glance.text.FontWeight
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 

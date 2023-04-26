@@ -2,6 +2,7 @@ package com.quickcallwidget.ui.screens
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,20 +20,24 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.room.Room
 import com.quickcallwidget.R
 import com.quickcallwidget.data.Contact
+import com.quickcallwidget.data.db.Database
+import com.quickcallwidget.data.db.TestDB
 import com.quickcallwidget.ui.ContactList
-import com.quickcallwidget.ui.screens.utils.CustomInfoButton
-import com.quickcallwidget.ui.screens.utils.CustomTextField
-import com.quickcallwidget.ui.screens.utils.fontFamily
-import com.quickcallwidget.ui.screens.utils.pinWidget
+import com.quickcallwidget.ui.screens.utils.*
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
+@OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun MainScreen(
-    title: String,
+    navController: NavController
 ) {
     val phoneNumber = remember { mutableStateOf("") }
     val userName = remember { mutableStateOf("") }
@@ -53,15 +58,7 @@ fun MainScreen(
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        Text(
-            text = title,
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            fontSize = 22.sp,
-            fontFamily = fontFamily,
-            fontWeight = FontWeight.Medium,
-            color = Color.White,
-        )
+        CustomTopBar( navController = navController)
 
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -91,6 +88,14 @@ fun MainScreen(
         val appContext = context.applicationContext
         val mySharedPrefs = appContext.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
 
+        //room (save list of widgets)
+        val db = Room.databaseBuilder(context, Database::class.java, "new_db").build()
+        val dao = db.dao()
+
+        val result by dao.readAll().collectAsState(initial = emptyList())
+        Log.d("VVV", "listTest= $result")
+
+
         Button(
             onClick = {
                 if ((userName.value.isNotEmpty()) && (phoneNumber.value.isNotEmpty())) {
@@ -102,14 +107,22 @@ fun MainScreen(
                         .setMessage(userName.value + "\n${phoneNumber.value}")
                         .setPositiveButton(R.string.accept) { _, _ ->
 
-                            //===save name for first widget share preferences
+                            // 1. ===save name for first widget share preferences
                             val editor = mySharedPrefs.edit()
                             editor.putString("FirstWidgetName", userName.value)
                             editor.putString("Phone", phoneNumber.value)
                             editor.apply()
 
-                            //Add widget to the main screen Alert
+                            // 2. add widget to the main screen Alert
                             pinWidget(context)
+
+                            // 3. save to db
+                            GlobalScope.launch {
+                                    dao.insertItem(TestDB(0, userName.value,phoneNumber.value))
+                                val result = dao.readAll()
+                                Log.d("VVV", "result: $result")
+                            }
+
 
                             //====
                             val addInfoDialog = android.app.AlertDialog.Builder(context)
@@ -179,7 +192,7 @@ fun MainScreen(
                     val addInfoDialog = android.app.AlertDialog.Builder(context)
                         .setMessage(R.string.how_to_add_widget)
                         .setPositiveButton(R.string.ok) { _, _ ->
-                            //stay same plase
+                            //stay same place
                         }.create()
                     addInfoDialog.show()
                 },

@@ -34,5 +34,6 @@
     <string name="complete">Complete both fields!</string>
     <string name="confirm">Confirm save Name: </string>
     <string name="phone_">Phone: </string>
+    <string name="widget_list">Your widgets</string>
 
 </resources>

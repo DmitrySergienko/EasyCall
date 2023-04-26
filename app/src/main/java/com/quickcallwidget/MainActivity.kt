@@ -9,8 +9,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -20,16 +18,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import com.quickcallwidget.ui.screens.MainScreen
-import com.quickcallwidget.ui.theme.quickcallwidgetTheme
-
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.quickcallwidget.data.db.DatabaseProvider
+import com.quickcallwidget.ui.navigation.SetupNavGraph
+import com.quickcallwidget.ui.theme.QuickcallwidgetTheme
 
 class MainActivity : ComponentActivity() {
 
     //permission request
     private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
+
+    //navigation
+    private lateinit var navController: NavHostController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,12 +38,18 @@ class MainActivity : ComponentActivity() {
         //permission request
         permissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
+
         ) {
             // permission granted launch code
+            //Room instance
+            val databaseProvider = DatabaseProvider(this@MainActivity)
+
             setContent {
+                navController = rememberNavController()
+                //SetupNavGraph(navController = navController)
 
                 MyApp {
-                    quickcallwidgetTheme() {
+                    QuickcallwidgetTheme() {
                         Image(
                             painter = painterResource(R.drawable.ic_background),
                             contentDescription = "imageBack",
@@ -51,15 +58,17 @@ class MainActivity : ComponentActivity() {
                                 .alpha(0.7f),
                             contentScale = ContentScale.FillBounds
                         )
+
                         Column() {
-                            MainScreen(stringResource(id = R.string.first_widget_title))
-                            Divider(color = Color.White, thickness = 1.dp, modifier = Modifier.padding(10.dp))
+
+                            SetupNavGraph(navController = navController, myDao = databaseProvider.myDao)
+
                         }
+
                     }
                 }
             }
         }
-
 
         window.statusBarColor = Color.Transparent.toArgb()
 
@@ -83,3 +92,6 @@ fun MyApp(content: @Composable () -> Unit) {
         }
     }
 }
+
+
+
