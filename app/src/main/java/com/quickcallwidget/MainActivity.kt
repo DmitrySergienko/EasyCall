@@ -26,6 +26,7 @@ import com.quickcallwidget.ui.theme.QuickcallwidgetTheme
 
 class MainActivity : ComponentActivity() {
 
+
     //permission request
     private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
 
@@ -61,7 +62,9 @@ class MainActivity : ComponentActivity() {
 
                         Column() {
 
-                            SetupNavGraph(navController = navController, myDao = databaseProvider.myDao)
+                            SetupNavGraph(
+                                navController = navController,
+                                myDao = databaseProvider.myDao)
 
                         }
 

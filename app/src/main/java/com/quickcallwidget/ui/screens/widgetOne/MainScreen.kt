@@ -1,8 +1,11 @@
 package com.quickcallwidget.ui.screens
 
-import android.app.Activity
+import android.app.PendingIntent
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
-import android.util.Log
+import android.content.Intent
+import android.os.Bundle
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,10 +26,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.room.Room
 import com.quickcallwidget.R
 import com.quickcallwidget.data.Contact
-import com.quickcallwidget.data.db.Database
+import com.quickcallwidget.data.db.MyDao
 import com.quickcallwidget.data.db.TestDB
 import com.quickcallwidget.ui.ContactList
 import com.quickcallwidget.ui.screens.utils.*
@@ -37,7 +39,8 @@ import kotlinx.coroutines.launch
 @OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun MainScreen(
-    navController: NavController
+    navController: NavController,
+    myDao: MyDao,
 ) {
     val phoneNumber = remember { mutableStateOf("") }
     val userName = remember { mutableStateOf("") }
@@ -45,7 +48,7 @@ fun MainScreen(
     val context = LocalContext.current
 
     val sharedPrefs = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
-    val widgetName = sharedPrefs.getString("FirstWidgetName", null)
+    val widgetName = sharedPrefs.getString("Name", null)
     val widgetPhone = sharedPrefs.getString("Phone", null)
 
     val selectedItem by remember { mutableStateOf<Contact?>(Contact("default", "default")) }
@@ -84,18 +87,6 @@ fun MainScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        //share preferences
-        val appContext = context.applicationContext
-        val mySharedPrefs = appContext.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
-
-        //room (save list of widgets)
-        val db = Room.databaseBuilder(context, Database::class.java, "new_db").build()
-        val dao = db.dao()
-
-        val result by dao.readAll().collectAsState(initial = emptyList())
-        Log.d("VVV", "listTest= $result")
-
-
         Button(
             onClick = {
                 if ((userName.value.isNotEmpty()) && (phoneNumber.value.isNotEmpty())) {
@@ -103,41 +94,47 @@ fun MainScreen(
                     isClicked = true
 
                     //alert dialog confirm save contact
+                    // 1. ===save name for first widget share preferences
+                   // widNumber.value = 1
+                    val editor = sharedPrefs.edit()
+                    editor.putString("Name", userName.value)
+                        .putString("Phone", phoneNumber.value)
+                        .putInt("WidNumber", 1)
+                    editor.apply()
+
+                    // 2. add widget to the main screen Alert
+                    val mAppWidgetManager = AppWidgetManager.getInstance(context)
+
+                    val myProvider = ComponentName(context, ActionWidgetReceiver::class.java)
+                    val b = Bundle()
+
+                    if (mAppWidgetManager.isRequestPinAppWidgetSupported) {
+                        val pinnedWidgetCallbackIntent = Intent(context, ActionWidgetReceiver::class.java)
+                        val successCallback = PendingIntent.getBroadcast( context,
+                            0,pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE
+                        )
+                        mAppWidgetManager.requestPinAppWidget(myProvider,b,successCallback)
+                    }
+
+                    // 3. save to db
+                    GlobalScope.launch {
+                        myDao.insertItem(TestDB(0, userName.value,phoneNumber.value))
+                    }
+
+
+
                     val addInfoDialog = android.app.AlertDialog.Builder(context)
                         .setMessage(userName.value + "\n${phoneNumber.value}")
                         .setPositiveButton(R.string.accept) { _, _ ->
-
-                            // 1. ===save name for first widget share preferences
-                            val editor = mySharedPrefs.edit()
-                            editor.putString("FirstWidgetName", userName.value)
-                            editor.putString("Phone", phoneNumber.value)
-                            editor.apply()
-
-                            // 2. add widget to the main screen Alert
-                            pinWidget(context)
-
-                            // 3. save to db
-                            GlobalScope.launch {
-                                    dao.insertItem(TestDB(0, userName.value,phoneNumber.value))
-                                val result = dao.readAll()
-                                Log.d("VVV", "result: $result")
-                            }
-
-
-                            //====
-                            val addInfoDialog = android.app.AlertDialog.Builder(context)
-                                .setMessage(R.string.message_widget_ready)
-                                .setPositiveButton(R.string.ok) { _, _ ->
-                                    val activity = (context as? Activity)
-                                    activity?.finish()
-                                }.create()
-                            addInfoDialog.show()
+                            isClicked = true
                         }
                         .setNegativeButton(R.string.no) { _, _ ->
                             //stay on same fragment
                             isClicked = false
-                        }.create()
+                        }
+                        .create()
                     addInfoDialog.show()
+
                 } else {
                     Toast.makeText(context, R.string.complete, Toast.LENGTH_LONG).show()
                 }
@@ -180,8 +177,9 @@ fun MainScreen(
                 onClick = {
                     isClicked = false
                     val editor = sharedPrefs.edit()
-                    editor.remove("FirstWidgetName")
+                    editor.remove("Name")
                     editor.remove("Phone")
+                    editor.remove("WidNumber")
                     editor.apply()
                 },
                 icon = painterResource(id = R.drawable.baseline_edit_note_24)

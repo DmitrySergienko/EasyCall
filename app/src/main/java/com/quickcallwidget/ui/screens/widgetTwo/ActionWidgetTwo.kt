@@ -22,21 +22,22 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 
 
-internal val actionWidgetKey = ActionParameters.Key<String>("action-widget-key")
+internal val actionWidgetKeyTwo = ActionParameters.Key<String>("action-widget-key-two")
 
-class ActionWidget : GlanceAppWidget() {
+class ActionWidgetTwo : GlanceAppWidget() {
 
     @Composable
     override fun Content() {
         val context = LocalContext.current
         val appContext = context.applicationContext
-        val sharedPrefs = appContext.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
-        val widgetName = sharedPrefs.getString("FirstWidgetName", null)
+        val sharedPrefs = appContext.getSharedPreferences("myPrefsTwo", Context.MODE_PRIVATE)
+        val widgetName = sharedPrefs.getString("Name", null)
         Column(
             modifier = GlanceModifier
                 .padding(8.dp)
 
         ) {
+
             Row() {
                 if (widgetName != null) {
                     Button(
@@ -48,8 +49,8 @@ class ActionWidget : GlanceAppWidget() {
                             fontSize = 24.sp,
                         ),
 
-                        onClick = actionRunCallback<LogActionCallback>(
-                            parameters = actionParametersOf(actionWidgetKey to "log event")
+                        onClick = actionRunCallback<LogActionCallbackTwo>(
+                            parameters = actionParametersOf(actionWidgetKeyTwo to "log event")
                         ),
                     )
                 }
@@ -58,7 +59,7 @@ class ActionWidget : GlanceAppWidget() {
     }
 }
 
-class LogActionCallback : ActionCallback {
+class LogActionCallbackTwo : ActionCallback {
     override suspend fun onRun(
         context: Context,
         glanceId: GlanceId,
@@ -78,9 +79,11 @@ class LogActionCallback : ActionCallback {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         ContextCompat.startActivity(context, intent, null)
     }
+
+
 }
 
-class ActionWidgetReceiver : GlanceAppWidgetReceiver() {
+class ActionWidgetReceiverTwo : GlanceAppWidgetReceiver() {
 
-    override val glanceAppWidget: GlanceAppWidget = ActionWidget()
+    override val glanceAppWidget: GlanceAppWidget = ActionWidgetTwo()
 }

@@ -1,5 +1,7 @@
 package com.quickcallwidget.ui.screens
 
+import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,6 +39,8 @@ fun HomeScreen(
     //get instance room bd as injection
     val result by myDao.readAll().collectAsState(initial = emptyList())
     val list = mutableListOf<TestDB>()
+    val context = LocalContext.current
+    val sharedPrefs = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
 
     for (i in result) list.add(TestDB(i.id, i.name, i.phone))
 
@@ -79,7 +84,16 @@ fun HomeScreen(
                     }
                 }
                 CycleButtonWithPlus {
-                    navController.navigate(Screen.MainScreen.route)
+
+                    val phoneNumber = sharedPrefs.getString("Phone", null)
+                    val widNumber = sharedPrefs.getInt("WidNumber", 0)
+                    Log.d("VVV", "HomeScreen() phoneNumber $phoneNumber")
+                    Log.d("VVV", "HomeScreen() widNumber $widNumber")
+
+                    when(widNumber){
+                        1 -> navController.navigate(Screen.MainScreenTwo.route)
+                        else -> {navController.navigate(Screen.MainScreen.route)}
+                    }
                 }
             }
         }

@@ -27,7 +27,22 @@
         </activity>
 
         <receiver
-            android:name="com.quickcallwidget.ui.screens.ActionWidgetReceiver"
+            android:name=".ui.screens.ActionWidgetReceiver"
+            android:enabled="true"
+            android:exported="false">
+
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_action_info" />
+
+        </receiver>
+
+        <receiver
+            android:name=".ui.screens.ActionWidgetReceiverTwo"
             android:enabled="true"
             android:exported="false">
 
