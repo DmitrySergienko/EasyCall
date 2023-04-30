@@ -6,6 +6,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -45,7 +46,6 @@ fun MainScreenTwo(
 ) {
     val phoneNumber = remember { mutableStateOf("") }
     val userName = remember { mutableStateOf("") }
-    //val widNumberTwo = remember { mutableStateOf(0) }
     var isClickedTwo by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
@@ -55,6 +55,8 @@ fun MainScreenTwo(
 
     val selectedItem by remember { mutableStateOf<Contact?>(Contact("default", "default")) }
 
+    Log.d("VVV", "widgetName of second widget $widgetName")
+
     if (widgetName != null) {
         isClickedTwo = true
     }
@@ -63,6 +65,7 @@ fun MainScreenTwo(
         modifier = Modifier
             .fillMaxWidth()
     ) {
+        Text(text = "Widget two")
         CustomTopBar( navController = navController)
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -93,11 +96,7 @@ fun MainScreenTwo(
             onClick = {
                 if ((userName.value.isNotEmpty()) && (phoneNumber.value.isNotEmpty())) {
 
-                    isClickedTwo = true
-
-                    //alert dialog confirm save contact
                     // 1. ===save name for first widget share preferences
-                    // widNumber.value = 1
                     val editor = sharedPrefs.edit()
                     editor.putString("Name", userName.value)
                         .putString("Phone", phoneNumber.value)
@@ -116,7 +115,6 @@ fun MainScreenTwo(
                             0,pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE
                         )
                         mAppWidgetManager.requestPinAppWidget(myProvider,b,successCallback)
-
                     }
 
                     // 3. save to db
@@ -124,17 +122,8 @@ fun MainScreenTwo(
                         myDao.insertItem(TestDB(0, userName.value,phoneNumber.value))
                     }
 
-                    val addInfoDialog = android.app.AlertDialog.Builder(context)
-                        .setMessage(userName.value + "\n${phoneNumber.value}")
-                        .setPositiveButton(R.string.accept) { _, _ ->
-                            isClickedTwo = true
-                        }
-                        .setNegativeButton(R.string.no) { _, _ ->
-                            //stay on same fragment
-                            isClickedTwo = false
-                        }
-                        .create()
-                    addInfoDialog.show()
+                    //4. confirm widget created
+                    isClickedTwo = true
 
                 } else {
                     Toast.makeText(context, R.string.complete, Toast.LENGTH_LONG).show()
@@ -177,7 +166,6 @@ fun MainScreenTwo(
 
                 text = stringResource(R.string.edit),
                 onClick = {
-
                     //1. remove the widget from the share store
                     isClickedTwo = false
                     val editor = sharedPrefs.edit()
@@ -185,12 +173,6 @@ fun MainScreenTwo(
                     editor.remove("Phone")
                     editor.remove("WidNumber")
                     editor.apply()
-
-                    //2. remove widget from Home screen
-                    //navController.popBackStack()
-
-
-
                 },
 
 

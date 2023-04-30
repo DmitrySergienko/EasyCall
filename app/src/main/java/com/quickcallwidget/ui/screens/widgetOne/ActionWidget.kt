@@ -32,6 +32,9 @@ class ActionWidget : GlanceAppWidget() {
         val appContext = context.applicationContext
         val sharedPrefs = appContext.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
         val widgetName = sharedPrefs.getString("Name", null)
+        val appWidgetId = LocalGlanceId.current.toString().filter { it.isDigit() }.toInt()
+        val editor = sharedPrefs.edit()
+        editor.putInt("appWidgetId",appWidgetId).apply()
         Column(
             modifier = GlanceModifier
                 .padding(8.dp)
@@ -59,7 +62,7 @@ class ActionWidget : GlanceAppWidget() {
 }
 
 class LogActionCallback : ActionCallback {
-    override suspend fun onRun(
+    override suspend fun onAction(
         context: Context,
         glanceId: GlanceId,
         parameters: ActionParameters

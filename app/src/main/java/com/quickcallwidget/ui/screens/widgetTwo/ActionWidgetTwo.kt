@@ -60,13 +60,13 @@ class ActionWidgetTwo : GlanceAppWidget() {
 }
 
 class LogActionCallbackTwo : ActionCallback {
-    override suspend fun onRun(
+    override suspend fun onAction(
         context: Context,
         glanceId: GlanceId,
         parameters: ActionParameters
     ) {
         val appContext = context.applicationContext
-        val sharedPrefs = appContext.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val sharedPrefs = appContext.getSharedPreferences("myPrefsTwo", Context.MODE_PRIVATE)
         val phoneNumber = sharedPrefs.getString("Phone", null)
 
         if (phoneNumber != null) {

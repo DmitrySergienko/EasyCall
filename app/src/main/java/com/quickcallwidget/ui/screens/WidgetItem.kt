@@ -1,5 +1,7 @@
 package com.quickcallwidget.ui.screens
 
+import android.content.ComponentName
+import android.content.pm.PackageManager
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,6 +36,8 @@ fun WidgetItem(
     navController: NavController,
     myDao: MyDao
 ) {
+
+    val context = LocalContext.current
 
     Card(
         modifier = Modifier
@@ -83,12 +88,25 @@ fun WidgetItem(
                     modifier = Modifier
                         .padding(end = 10.dp)
                         .clickable {
-
+                            //1. delete widget from room
                             val item = TestDB(id = contact.id, name = contact.name, phone = contact.phone)
                             GlobalScope.launch {
                                 myDao.deleteItem(item)
                             }
-                            navController.navigate(route = Screen.Home.route) //update history screen
+                            //2. activate enuble widget
+
+                            val receiver = ComponentName(context, ActionWidgetReceiver::class.java)
+
+                            val pm = context.packageManager
+
+                            pm.setComponentEnabledSetting(
+                                receiver,
+                                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                                PackageManager.DONT_KILL_APP
+                            )
+
+                            //3. update history screen
+                            navController.navigate(route = Screen.Home.route)
                         },
                     imageVector = Icons.Default.Delete,
                     contentDescription = "Delete button",

@@ -19,7 +19,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -32,9 +31,8 @@ import com.quickcallwidget.data.db.MyDao
 import com.quickcallwidget.data.db.TestDB
 import com.quickcallwidget.ui.ContactList
 import com.quickcallwidget.ui.screens.utils.*
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+
 
 @OptIn(DelicateCoroutinesApi::class)
 @Composable
@@ -61,7 +59,7 @@ fun MainScreen(
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        CustomTopBar( navController = navController)
+        CustomTopBar(navController = navController)
 
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -91,11 +89,7 @@ fun MainScreen(
             onClick = {
                 if ((userName.value.isNotEmpty()) && (phoneNumber.value.isNotEmpty())) {
 
-                    isClicked = true
-
-                    //alert dialog confirm save contact
-                    // 1. ===save name for first widget share preferences
-                   // widNumber.value = 1
+                    // 1. save in share preferences
                     val editor = sharedPrefs.edit()
                     editor.putString("Name", userName.value)
                         .putString("Phone", phoneNumber.value)
@@ -109,31 +103,22 @@ fun MainScreen(
                     val b = Bundle()
 
                     if (mAppWidgetManager.isRequestPinAppWidgetSupported) {
-                        val pinnedWidgetCallbackIntent = Intent(context, ActionWidgetReceiver::class.java)
-                        val successCallback = PendingIntent.getBroadcast( context,
-                            0,pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE
+                        val pinnedWidgetCallbackIntent =
+                            Intent(context, ActionWidgetReceiver::class.java)
+                        val successCallback = PendingIntent.getBroadcast(
+                            context,
+                            0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE
                         )
-                        mAppWidgetManager.requestPinAppWidget(myProvider,b,successCallback)
+                        mAppWidgetManager.requestPinAppWidget(myProvider, b, successCallback)
                     }
 
                     // 3. save to db
                     GlobalScope.launch {
-                        myDao.insertItem(TestDB(0, userName.value,phoneNumber.value))
+                        myDao.insertItem(TestDB(0, userName.value, phoneNumber.value))
                     }
 
-
-
-                    val addInfoDialog = android.app.AlertDialog.Builder(context)
-                        .setMessage(userName.value + "\n${phoneNumber.value}")
-                        .setPositiveButton(R.string.accept) { _, _ ->
-                            isClicked = true
-                        }
-                        .setNegativeButton(R.string.no) { _, _ ->
-                            //stay on same fragment
-                            isClicked = false
-                        }
-                        .create()
-                    addInfoDialog.show()
+                        // 4. widget created
+                    isClicked = true
 
                 } else {
                     Toast.makeText(context, R.string.complete, Toast.LENGTH_LONG).show()
@@ -168,35 +153,7 @@ fun MainScreen(
                 )
             }
         }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            CustomInfoButton(
-                text = stringResource(R.string.edit),
-                onClick = {
-                    isClicked = false
-                    val editor = sharedPrefs.edit()
-                    editor.remove("Name")
-                    editor.remove("Phone")
-                    editor.remove("WidNumber")
-                    editor.apply()
-                },
-                icon = painterResource(id = R.drawable.baseline_edit_note_24)
-            )
-            CustomInfoButton(
-                text = stringResource(id = R.string.info),
-                onClick = {
-                    val addInfoDialog = android.app.AlertDialog.Builder(context)
-                        .setMessage(R.string.how_to_add_widget)
-                        .setPositiveButton(R.string.ok) { _, _ ->
-                            //stay same place
-                        }.create()
-                    addInfoDialog.show()
-                },
-                icon = painterResource(id = R.drawable.baseline_info_24)
-            )
-        }
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()

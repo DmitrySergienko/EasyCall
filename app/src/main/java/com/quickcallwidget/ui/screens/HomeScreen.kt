@@ -1,7 +1,6 @@
 package com.quickcallwidget.ui.screens
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -85,10 +84,7 @@ fun HomeScreen(
                 }
                 CycleButtonWithPlus {
 
-                    val phoneNumber = sharedPrefs.getString("Phone", null)
                     val widNumber = sharedPrefs.getInt("WidNumber", 0)
-                    Log.d("VVV", "HomeScreen() phoneNumber $phoneNumber")
-                    Log.d("VVV", "HomeScreen() widNumber $widNumber")
 
                     when(widNumber){
                         1 -> navController.navigate(Screen.MainScreenTwo.route)
