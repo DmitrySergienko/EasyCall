@@ -30,6 +30,7 @@ import com.quickcallwidget.data.Contact
 import com.quickcallwidget.data.db.MyDao
 import com.quickcallwidget.data.db.TestDB
 import com.quickcallwidget.ui.ContactList
+import com.quickcallwidget.ui.navigation.Screen
 import com.quickcallwidget.ui.screens.utils.*
 import kotlinx.coroutines.*
 
@@ -40,14 +41,20 @@ fun MainScreen(
     navController: NavController,
     myDao: MyDao,
 ) {
+    val context = LocalContext.current
+    val sharedPrefs = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+
+
     val phoneNumber = remember { mutableStateOf("") }
     val userName = remember { mutableStateOf("") }
     var isClicked by remember { mutableStateOf(false) }
-    val context = LocalContext.current
 
-    val sharedPrefs = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
     val widgetName = sharedPrefs.getString("Name", null)
     val widgetPhone = sharedPrefs.getString("Phone", null)
+
+    val receiver = ComponentName(context, ActionWidgetReceiver::class.java)
+    val appWidgetManager = AppWidgetManager.getInstance(context)
+    val b = Bundle()
 
     val selectedItem by remember { mutableStateOf<Contact?>(Contact("default", "default")) }
 
@@ -91,34 +98,31 @@ fun MainScreen(
 
                     // 1. save in share preferences
                     val editor = sharedPrefs.edit()
-                    editor.putString("Name", userName.value)
+                    editor
+                        .putString("Name", userName.value)
                         .putString("Phone", phoneNumber.value)
                         .putInt("WidNumber", 1)
                     editor.apply()
 
-                    // 2. add widget to the main screen Alert
-                    val mAppWidgetManager = AppWidgetManager.getInstance(context)
-
-                    val myProvider = ComponentName(context, ActionWidgetReceiver::class.java)
-                    val b = Bundle()
-
-                    if (mAppWidgetManager.isRequestPinAppWidgetSupported) {
-                        val pinnedWidgetCallbackIntent =
-                            Intent(context, ActionWidgetReceiver::class.java)
-                        val successCallback = PendingIntent.getBroadcast(
-                            context,
-                            0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE
-                        )
-                        mAppWidgetManager.requestPinAppWidget(myProvider, b, successCallback)
-                    }
-
-                    // 3. save to db
+                    // 2. save to the room
                     GlobalScope.launch {
                         myDao.insertItem(TestDB(0, userName.value, phoneNumber.value))
                     }
 
-                        // 4. widget created
+                    // 3. widget created
                     isClicked = true
+
+                    // 4. add widget to the main screen Alert
+
+                        if (appWidgetManager.isRequestPinAppWidgetSupported) {
+                            val pinnedWidgetCallbackIntent = Intent(context, ActionWidgetReceiver::class.java)
+                            val successCallback = PendingIntent.getBroadcast(
+                                context,0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE)
+                            appWidgetManager.requestPinAppWidget(receiver, b, successCallback)
+                        }
+
+                    // 6. navigate to the home screen
+                    navController.navigate(route = Screen.Home.route)
 
                 } else {
                     Toast.makeText(context, R.string.complete, Toast.LENGTH_LONG).show()

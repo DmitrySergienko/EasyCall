@@ -49,6 +49,9 @@ android {
 
 dependencies {
 
+    //sharepreference for compose
+    implementation 'androidx.compose.runtime:runtime-livedata:1.1.0'
+
     //ROOM
     implementation "androidx.room:room-runtime:2.4.2"
     kapt "androidx.room:room-compiler:2.4.2"

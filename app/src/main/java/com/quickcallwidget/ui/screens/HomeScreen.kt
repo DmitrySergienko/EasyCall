@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -28,7 +29,11 @@ import com.quickcallwidget.data.db.TestDB
 import com.quickcallwidget.ui.navigation.Screen
 import com.quickcallwidget.ui.screens.utils.CycleButtonWithPlus
 import com.quickcallwidget.ui.screens.utils.fontFamily
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
+@OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun HomeScreen(
     navController: NavController,
@@ -73,22 +78,59 @@ fun HomeScreen(
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                //in case user deleted the widget manually
+                if (sharedPrefs.getString("WidgetOneDeleted", "") == "WidgetOneDeleted") {
 
-                LazyColumn(
-                    contentPadding = PaddingValues(bottom = 20.dp),
-                )
-                {
-                    items(list) { contact ->
-                        WidgetItem(contact = contact, navController = navController, myDao = myDao)
+                    //1. delete widget from the room
+                    if(list.isNotEmpty()){
+                        val item = list.first()
+                        LaunchedEffect(true) {
+                            GlobalScope.launch {
+                                myDao.deleteItem(item)
+                            }
+                        }
+                        // 2. clean share preferences
+                        val editor = sharedPrefs.edit()
+                        editor.putString("Name", null)
+                            .putString("Phone", null)
+                            .putInt("WidNumber", 0)
+                        editor.apply()
+                    }
+
+                    LazyColumn(
+                        contentPadding = PaddingValues(bottom = 20.dp),
+                    )
+                    {
+                        items(list) { contact ->
+                            WidgetItem(
+                                contact = contact,
+                                navController = navController,
+                            )
+                        }
+                    }
+                } else {
+                    LazyColumn(
+                        contentPadding = PaddingValues(bottom = 20.dp),
+                    )
+                    {
+                        items(list) { contact ->
+                            WidgetItem(
+                                contact = contact,
+                                navController = navController,
+                            )
+                        }
                     }
                 }
+
                 CycleButtonWithPlus {
 
                     val widNumber = sharedPrefs.getInt("WidNumber", 0)
 
-                    when(widNumber){
+                    when (widNumber) {
                         1 -> navController.navigate(Screen.MainScreenTwo.route)
-                        else -> {navController.navigate(Screen.MainScreen.route)}
+                        else -> {
+                            navController.navigate(Screen.MainScreen.route)
+                        }
                     }
                 }
             }

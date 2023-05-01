@@ -1,7 +1,5 @@
 package com.quickcallwidget.ui.screens
 
-import android.content.ComponentName
-import android.content.pm.PackageManager
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,42 +7,32 @@ import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.quickcallwidget.data.db.MyDao
 import com.quickcallwidget.data.db.TestDB
 import com.quickcallwidget.ui.navigation.Screen
 import com.quickcallwidget.ui.screens.utils.fontFamily
 import com.quickcallwidget.ui.theme.BlueLight
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
-@OptIn(DelicateCoroutinesApi::class)
+
 @Composable
 fun WidgetItem(
     contact: TestDB,
-    navController: NavController,
-    myDao: MyDao
+    navController: NavController
 ) {
-
-    val context = LocalContext.current
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 10.dp, start = 12.dp, end = 12.dp, bottom = 10.dp)
             .clickable {
-                //onItemClick(contact)
                 navController.navigate(Screen.MainScreen.route)
             },
         backgroundColor = Color.White,
@@ -84,44 +72,8 @@ fun WidgetItem(
                         fontWeight = FontWeight.Black
                     )
                 }
-                Icon(
-                    modifier = Modifier
-                        .padding(end = 10.dp)
-                        .clickable {
-                            //1. delete widget from room
-                            val item = TestDB(id = contact.id, name = contact.name, phone = contact.phone)
-                            GlobalScope.launch {
-                                myDao.deleteItem(item)
-                            }
-                            //2. activate enuble widget
-
-                            val receiver = ComponentName(context, ActionWidgetReceiver::class.java)
-
-                            val pm = context.packageManager
-
-                            pm.setComponentEnabledSetting(
-                                receiver,
-                                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                                PackageManager.DONT_KILL_APP
-                            )
-
-                            //3. update history screen
-                            navController.navigate(route = Screen.Home.route)
-                        },
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Delete button",
-                    tint = BlueLight
-                )
             }
-
-
         }
     }
 }
 
-/*
-@Composable
-@Preview
-fun ItemPreview() {
-    WidgetItem(navController = rememberNavController())
-}*/

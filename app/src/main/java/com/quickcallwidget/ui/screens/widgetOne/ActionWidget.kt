@@ -86,4 +86,13 @@ class LogActionCallback : ActionCallback {
 class ActionWidgetReceiver : GlanceAppWidgetReceiver() {
 
     override val glanceAppWidget: GlanceAppWidget = ActionWidget()
+
+    override fun onDisabled(context: Context?) {
+        super.onDisabled(context)
+
+        val sharedPrefs = context?.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPrefs?.edit()
+        editor?.putString("WidgetOneDeleted", "WidgetOneDeleted")
+        editor?.apply()
+    }
 }
