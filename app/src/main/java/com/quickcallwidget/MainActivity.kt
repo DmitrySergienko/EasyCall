@@ -26,7 +26,6 @@ import com.quickcallwidget.ui.theme.QuickcallwidgetTheme
 
 class MainActivity : ComponentActivity() {
 
-
     //permission request
     private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
 
@@ -42,7 +41,7 @@ class MainActivity : ComponentActivity() {
 
         ) {
             // permission granted launch code
-            //Room instance
+            // room instance
             val databaseProvider = DatabaseProvider(this@MainActivity)
 
             setContent {
@@ -59,22 +58,16 @@ class MainActivity : ComponentActivity() {
                                 .alpha(0.7f),
                             contentScale = ContentScale.FillBounds
                         )
-
                         Column() {
-
                             SetupNavGraph(
                                 navController = navController,
                                 myDao = databaseProvider.myDao)
-
                         }
-
                     }
                 }
             }
         }
-
         window.statusBarColor = Color.Transparent.toArgb()
-
         permissionLauncher.launch(
             arrayOf(
                 Manifest.permission.CALL_PHONE,
