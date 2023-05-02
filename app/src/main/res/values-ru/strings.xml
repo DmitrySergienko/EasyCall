@@ -36,6 +36,6 @@
     <string name="complete">Заполните оба поля!</string>
     <string name="confirm">Подтвердить сохранение: </string>
     <string name="phone_">Номер контакта: </string>
-    <string name="widget_list">Список избранных контактов</string>
+    <string name="widget_list">Добавить контакт на экран телефона</string>
 
 </resources>
