@@ -6,12 +6,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,7 +47,7 @@ fun WidgetItem(
             ) {
                 Icon(
                     modifier = Modifier.padding(start = 10.dp),
-                    imageVector = Icons.Default.Person,
+                    painter = painterResource(id = com.quickcallwidget.R.drawable.ic_person),
                     contentDescription = "Profile button",
                     tint = BlueLight
                 )
@@ -76,5 +75,7 @@ fun WidgetItem(
             }
         }
     }
+
+
 }
 

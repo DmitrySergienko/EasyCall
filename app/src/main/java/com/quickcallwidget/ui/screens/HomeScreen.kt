@@ -47,18 +47,10 @@ fun HomeScreen(
 
     MaterialTheme {
 
-       /* Image(
-            painter = painterResource(R.drawable.ic_background),
-            contentDescription = "imageBack",
-            modifier = Modifier
-                .fillMaxSize()
-                .alpha(0.7f),
-            contentScale = ContentScale.FillBounds
-        )*/
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(30.dp)
+                .padding( 30.dp)
         ) {
             Text(
                 text = stringResource(id = R.string.widget_list),
@@ -68,7 +60,7 @@ fun HomeScreen(
                 fontWeight = FontWeight.Black,
                 textAlign = TextAlign.Center
             )
-            Spacer(modifier = Modifier.width(28.dp))
+            Spacer(modifier = Modifier.height(42.dp))
 
             Column(
                 modifier = Modifier
@@ -110,18 +102,20 @@ fun HomeScreen(
                 } else {
                     LazyColumn(
                         contentPadding = PaddingValues(bottom = 20.dp),
-                    )
-                    {
+                    ) {
                         items(list) { contact ->
-                            WidgetItem(
-                                contact = contact,
-                                navController = navController,
-                            )
+
+                                WidgetItem(
+                                    contact = contact,
+                                    navController = navController,
+                                )
+
                         }
                     }
-                }
 
-                CycleButtonWithPlus {
+
+
+                    CycleButtonWithPlus {
 
                     val widNumber = sharedPrefs.getInt("WidNumber", 0)
 
@@ -135,5 +129,5 @@ fun HomeScreen(
             }
         }
     }
-}
+}}
 
