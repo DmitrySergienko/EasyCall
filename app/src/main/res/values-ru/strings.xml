@@ -24,12 +24,12 @@
     <string name="message_widget_ready">Ваш виджет готов!</string>
     <string name="stay_here">Остаться</string>
     <string name="go_to_main_screen">Выйти</string>
-    <string name="first_widget_title">Введите контактную информацию для вашего виджета</string>
+    <string name="first_widget_title">Выберите контакт</string>
     <string name="info">Инструкция</string>
     <string name="how_to_add_widget">Инструкция: как самостоятельно обавить виджет на главный экран\n\n1.Нажмите и удерживайте на пустое место на главном экране.\n2.Выберите \"Виджеты\" из появившегося списка вариантов.\n3.Прокрутите список доступных виджетов, пока не найдете виджет QuickCall.\n4.Нажмите и удерживайте виджет, чтобы взять его, затем переместите его на пустое место на главном экране.</string>
 
 
-    <string name="done">Готово</string>
+    <string name="done">Виджет создан</string>
     <string name="submit">Подтвердить</string>
     <string name="name_max">Имя (максимум 15 символов)</string>
     <string name="phone">Номер телефона</string>

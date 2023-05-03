@@ -1,4 +1,5 @@
-package com.quickcallwidget.ui.screens
+package com.quickcallwidget.ui.screens.widgetThree
+
 
 import android.content.Context
 import android.content.Intent
@@ -22,15 +23,15 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 
 
-internal val actionWidgetKeyTwo = ActionParameters.Key<String>("action-widget-key-two")
+internal val actionWidgetKeyThree = ActionParameters.Key<String>("action-widget-key-Three")
 
-class ActionWidgetTwo : GlanceAppWidget() {
+class ActionWidgetThree : GlanceAppWidget() {
 
     @Composable
     override fun Content() {
         val context = LocalContext.current
         val appContext = context.applicationContext
-        val sharedPrefs = appContext.getSharedPreferences("myPrefsTwo", Context.MODE_PRIVATE)
+        val sharedPrefs = appContext.getSharedPreferences("myPrefsThree", Context.MODE_PRIVATE)
         val widgetName = sharedPrefs.getString("Name", null)
         Column(
             modifier = GlanceModifier
@@ -49,8 +50,8 @@ class ActionWidgetTwo : GlanceAppWidget() {
                             fontSize = 24.sp,
                         ),
 
-                        onClick = actionRunCallback<LogActionCallbackTwo>(
-                            parameters = actionParametersOf(actionWidgetKeyTwo to "log event")
+                        onClick = actionRunCallback<LogActionCallbackThree>(
+                            parameters = actionParametersOf(actionWidgetKeyThree to "log event")
                         ),
                     )
                 }
@@ -59,7 +60,7 @@ class ActionWidgetTwo : GlanceAppWidget() {
     }
 }
 
-class LogActionCallbackTwo : ActionCallback {
+class LogActionCallbackThree : ActionCallback {
     override suspend fun onRun(
         context: Context,
         glanceId: GlanceId,
@@ -83,7 +84,7 @@ class LogActionCallbackTwo : ActionCallback {
 
 }
 
-class ActionWidgetReceiverTwo : GlanceAppWidgetReceiver() {
+class ActionWidgetReceiverThree : GlanceAppWidgetReceiver() {
 
-    override val glanceAppWidget: GlanceAppWidget = ActionWidgetTwo()
+    override val glanceAppWidget: GlanceAppWidget = ActionWidgetThree()
 }

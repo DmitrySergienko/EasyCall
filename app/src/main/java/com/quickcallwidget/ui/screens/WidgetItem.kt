@@ -64,6 +64,7 @@ fun WidgetItem(
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Black
                     )
+                    Spacer(modifier = Modifier.width(100.dp))
                     Text(
                         text = contact.phone,
                         color = Color.Black,

@@ -44,7 +44,6 @@ fun MainScreen(
     val context = LocalContext.current
     val sharedPrefs = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
 
-
     val phoneNumber = remember { mutableStateOf("") }
     val userName = remember { mutableStateOf("") }
     var isClicked by remember { mutableStateOf(false) }
@@ -65,10 +64,11 @@ fun MainScreen(
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(20.dp)
     ) {
         CustomTopBar(navController = navController)
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(22.dp))
 
         selectedItem?.let {
             CustomTextField(
@@ -113,13 +113,14 @@ fun MainScreen(
                     isClicked = true
 
                     // 4. add widget to the main screen Alert
-
-                        if (appWidgetManager.isRequestPinAppWidgetSupported) {
-                            val pinnedWidgetCallbackIntent = Intent(context, ActionWidgetReceiver::class.java)
-                            val successCallback = PendingIntent.getBroadcast(
-                                context,0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE)
-                            appWidgetManager.requestPinAppWidget(receiver, b, successCallback)
-                        }
+                    if (appWidgetManager.isRequestPinAppWidgetSupported) {
+                        val pinnedWidgetCallbackIntent =
+                            Intent(context, ActionWidgetReceiver::class.java)
+                        val successCallback = PendingIntent.getBroadcast(
+                            context, 0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE
+                        )
+                        appWidgetManager.requestPinAppWidget(receiver, b, successCallback)
+                    }
 
                     // 6. navigate to the home screen
                     navController.navigate(route = Screen.Home.route)
@@ -157,19 +158,20 @@ fun MainScreen(
                 )
             }
         }
+        //if contact selected not show contact list
+        if (!isClicked) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                ContactList(userName) { clickedItem ->
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            ContactList(userName) { clickedItem ->
-
-                if (selectedItem != null) {
-                    userName.value = clickedItem.name
-                    phoneNumber.value = clickedItem.phoneNumber
+                    if (selectedItem != null) {
+                        userName.value = clickedItem.name
+                        phoneNumber.value = clickedItem.phoneNumber
+                    }
                 }
             }
-
         }
     }
 }

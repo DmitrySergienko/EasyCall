@@ -62,7 +62,7 @@ class ActionWidget : GlanceAppWidget() {
 }
 
 class LogActionCallback : ActionCallback {
-    override suspend fun onAction(
+    override suspend fun onRun(
         context: Context,
         glanceId: GlanceId,
         parameters: ActionParameters

@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -41,9 +42,10 @@ fun CustomTopBar(
             Spacer(modifier = Modifier.width(28.dp))
             Text(
                 text = stringResource(id = R.string.first_widget_title),
-                fontSize = 20.sp,
+                fontSize = 22.sp,
                 fontFamily = fontFamily,
-                fontWeight = FontWeight.Normal
+                fontWeight = FontWeight.Normal,
+                textAlign = TextAlign.Center
             )
         }
     }

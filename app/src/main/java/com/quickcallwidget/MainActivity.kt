@@ -13,7 +13,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
@@ -54,8 +53,8 @@ class MainActivity : ComponentActivity() {
                             painter = painterResource(R.drawable.ic_background),
                             contentDescription = "imageBack",
                             modifier = Modifier
-                                .fillMaxSize()
-                                .alpha(0.7f),
+                                .fillMaxSize(),
+                               // .alpha(0.7f),
                             contentScale = ContentScale.FillBounds
                         )
                         Column() {

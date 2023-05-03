@@ -24,10 +24,10 @@
     <string name="message_widget_ready">Your widget is ready!</string>
     <string name="stay_here">Stay here</string>
     <string name="go_to_main_screen">Exit</string>
-    <string name="first_widget_title">Enter contact information for your widget</string>
+    <string name="first_widget_title">Choose a contact</string>
     <string name="info">Instruction</string>
     <string name="how_to_add_widget">Instruction: how add your widget to the home screen manually \n\n1.Long press on an empty space on your home screen.\n2.Select \"Widgets\" from the list of options that appears.\n3.Scroll through the list of available widgets until you find QuickCall Widget.\n4.Tap and hold on your widget to pick it up, then drag it to an empty space on the home screen.</string>
-    <string name="done">Done</string>
+    <string name="done">Widget created</string>
     <string name="submit">Submit</string>
     <string name="name_max">Name (max 15 characters)</string>
     <string name="phone">Phone Number</string>

@@ -22,9 +22,7 @@ fun CustomTextField(
     label: String,
     textType: KeyboardType
 ){
-
     OutlinedTextField(
-
         value = text.value,
         onValueChange = {text.value = it.take(15) },
         placeholder = {
@@ -35,15 +33,15 @@ fun CustomTextField(
         label = {
             if (widgetName != null) {
                 Text(
-                    widgetName, fontSize = 18.sp,
+                    widgetName, fontSize = 22.sp,
                     color = Color.White,
                     fontFamily = fontFamily,
-                    fontWeight = FontWeight.Normal,
+                    fontWeight = FontWeight.Black,
                 )
             } else {
                 Text(
                     label,
-                    fontSize = 18.sp,
+                    fontSize = 24.sp,
                     color = Color.White,
                     fontFamily = fontFamily,
                     fontWeight = FontWeight.Normal,
@@ -55,7 +53,7 @@ fun CustomTextField(
         modifier = Modifier.fillMaxWidth(),
         textStyle = TextStyle(
             color = MaterialTheme.colors.primary,
-            fontSize = 20.sp
+            fontSize = 22.sp
         ),
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = textType
