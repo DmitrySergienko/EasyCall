@@ -20,7 +20,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -32,6 +31,7 @@ import com.quickcallwidget.data.Contact
 import com.quickcallwidget.data.db.MyDao
 import com.quickcallwidget.data.db.TestDB
 import com.quickcallwidget.ui.ContactList
+import com.quickcallwidget.ui.navigation.Screen
 import com.quickcallwidget.ui.screens.ActionWidgetReceiverTwo
 import com.quickcallwidget.ui.screens.utils.*
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -40,22 +40,25 @@ import kotlinx.coroutines.launch
 
 @OptIn(DelicateCoroutinesApi::class)
 @Composable
-fun MainScreenTwo(
+fun DetailsScreenTwo(
     navController: NavController,
     myDao: MyDao,
 ) {
+    val context = LocalContext.current
+    val sharedPrefs = context.getSharedPreferences("myPrefsTwo", Context.MODE_PRIVATE)
+
     val phoneNumber = remember { mutableStateOf("") }
     val userName = remember { mutableStateOf("") }
     var isClickedTwo by remember { mutableStateOf(false) }
-    val context = LocalContext.current
 
-    val sharedPrefs = context.getSharedPreferences("myPrefsTwo", Context.MODE_PRIVATE)
     val widgetName = sharedPrefs.getString("Name", null)
     val widgetPhone = sharedPrefs.getString("Phone", null)
 
-    val selectedItem by remember { mutableStateOf<Contact?>(Contact("default", "default")) }
+    val receiver = ComponentName(context, ActionWidgetReceiverTwo::class.java)
+    val appWidgetManager = AppWidgetManager.getInstance(context)
+    val b = Bundle()
 
-    Log.d("VVV", "widgetName of second widget $widgetName")
+    val selectedItem by remember { mutableStateOf<Contact?>(Contact("default", "default")) }
 
     if (widgetName != null) {
         isClickedTwo = true
@@ -64,12 +67,12 @@ fun MainScreenTwo(
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(20.dp)
     ) {
-        Text(text = "Widget two")
-        CustomTopBar( navController = navController)
+        CustomTopBar(navController = navController)
 
-        Spacer(modifier = Modifier.height(32.dp))
-
+        Spacer(modifier = Modifier.height(22.dp))
+        Text(text = "Widget two", color = Color.White)
         selectedItem?.let {
             CustomTextField(
                 widgetName = widgetName,
@@ -96,34 +99,35 @@ fun MainScreenTwo(
             onClick = {
                 if ((userName.value.isNotEmpty()) && (phoneNumber.value.isNotEmpty())) {
 
-                    // 1. ===save name for first widget share preferences
+                    // 1. save in share preferences
                     val editor = sharedPrefs.edit()
-                    editor.putString("Name", userName.value)
+                    editor
+                        .putString("Name", userName.value)
                         .putString("Phone", phoneNumber.value)
-                        .putInt("WidNumber", 1)
+                        .putInt("WidNumber", 3)
                     editor.apply()
+                    Log.d("VVV", "WidNumber = ${sharedPrefs.getInt("WidNumber",10)}")
 
-                    // 2. add widget to the main screen Alert
-                    val mAppWidgetManager = AppWidgetManager.getInstance(context)
-
-                    val myProvider = ComponentName(context, ActionWidgetReceiverTwo::class.java)
-                    val b = Bundle()
-
-                    if (mAppWidgetManager.isRequestPinAppWidgetSupported) {
-                        val pinnedWidgetCallbackIntent = Intent(context, ActionWidgetReceiverTwo::class.java)
-                        val successCallback = PendingIntent.getBroadcast( context,
-                            0,pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE
-                        )
-                        mAppWidgetManager.requestPinAppWidget(myProvider,b,successCallback)
-                    }
-
-                    // 3. save to db
+                    // 2. save to the room
                     GlobalScope.launch {
-                        myDao.insertItem(TestDB(0, userName.value,phoneNumber.value))
+                        myDao.insertItem(TestDB(id=2, name=userName.value, phone= phoneNumber.value))
                     }
 
-                    //4. confirm widget created
+                    // 3. widget created
                     isClickedTwo = true
+
+                    // 4. add widget to the main screen Alert
+                    if (appWidgetManager.isRequestPinAppWidgetSupported) {
+                        val pinnedWidgetCallbackIntent =
+                            Intent(context, ActionWidgetReceiverTwo::class.java)
+                        val successCallback = PendingIntent.getBroadcast(
+                            context, 0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE
+                        )
+                        appWidgetManager.requestPinAppWidget(receiver, b, successCallback)
+                    }
+
+                    // 6. navigate to the home screen
+                    navController.navigate(route = Screen.Home.route)
 
                 } else {
                     Toast.makeText(context, R.string.complete, Toast.LENGTH_LONG).show()
@@ -158,51 +162,20 @@ fun MainScreenTwo(
                 )
             }
         }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            CustomInfoButton(
+        //if contact selected not show contact list
+        if (!isClickedTwo) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                ContactList(userName) { clickedItem ->
 
-                text = stringResource(R.string.edit),
-                onClick = {
-                    //1. remove the widget from the share store
-                    isClickedTwo = false
-                    val editor = sharedPrefs.edit()
-                    editor.remove("Name")
-                    editor.remove("Phone")
-                    editor.remove("WidNumber")
-                    editor.apply()
-                },
-
-
-                icon = painterResource(id = R.drawable.baseline_edit_note_24)
-            )
-            CustomInfoButton(
-                text = stringResource(id = R.string.info),
-                onClick = {
-                    val addInfoDialog = android.app.AlertDialog.Builder(context)
-                        .setMessage(R.string.how_to_add_widget)
-                        .setPositiveButton(R.string.ok) { _, _ ->
-                            //stay same place
-                        }.create()
-                    addInfoDialog.show()
-                },
-                icon = painterResource(id = R.drawable.baseline_info_24)
-            )
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            ContactList(userName) { clickedItem ->
-
-                if (selectedItem != null) {
-                    userName.value = clickedItem.name
-                    phoneNumber.value = clickedItem.phoneNumber
+                    if (selectedItem != null) {
+                        userName.value = clickedItem.name
+                        phoneNumber.value = clickedItem.phoneNumber
+                    }
                 }
             }
-
         }
     }
 }

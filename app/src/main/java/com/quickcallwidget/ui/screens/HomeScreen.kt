@@ -39,18 +39,20 @@ fun HomeScreen(
 
     //get instance room bd as injection
     val result by myDao.readAll().collectAsState(initial = emptyList())
+
     val list = mutableListOf<TestDB>()
     val context = LocalContext.current
     val sharedPrefs = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
-
+    val widNumber = sharedPrefs.getInt("WidNumber", 10)
     for (i in result) list.add(TestDB(i.id, i.name, i.phone))
+
 
     MaterialTheme {
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding( 30.dp)
+                .padding(30.dp)
         ) {
             Text(
                 text = stringResource(id = R.string.widget_list),
@@ -73,6 +75,7 @@ fun HomeScreen(
 
                     //1. delete widget from the room
                     if(list.isNotEmpty()){
+                       // Log.d("VVV", "HomeScreen() list: $list")
                         val item = list.first()
                         LaunchedEffect(true) {
                             GlobalScope.launch {
@@ -88,6 +91,7 @@ fun HomeScreen(
                         editor.apply()
                     }
 
+
                     LazyColumn(
                         contentPadding = PaddingValues(bottom = 20.dp),
                     )
@@ -95,7 +99,7 @@ fun HomeScreen(
                         items(list) { contact ->
                             WidgetItem(
                                 contact = contact,
-                                navController = navController,
+                                navController = navController
                             )
                         }
                     }
@@ -103,31 +107,29 @@ fun HomeScreen(
                     LazyColumn(
                         contentPadding = PaddingValues(bottom = 20.dp),
                     ) {
+                       // Log.d("VVV", "HomeScreen() list: $list")
                         items(list) { contact ->
-
                                 WidgetItem(
                                     contact = contact,
-                                    navController = navController,
+                                    navController = navController
                                 )
-
+                            }
                         }
                     }
 
-
-
                     CycleButtonWithPlus {
 
-                    val widNumber = sharedPrefs.getInt("WidNumber", 0)
 
                     when (widNumber) {
-                        1 -> navController.navigate(Screen.MainScreenTwo.route)
+                        2 -> navController.navigate(Screen.DetailsScreenTwo.route)
+                        3 -> navController.navigate(Screen.DetailsScreenThree.route)
                         else -> {
-                            navController.navigate(Screen.MainScreen.route)
+                            navController.navigate(Screen.DetailsScreenOne.route)
                         }
                     }
                 }
             }
         }
     }
-}}
+}
 

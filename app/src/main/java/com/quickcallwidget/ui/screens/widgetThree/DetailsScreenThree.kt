@@ -1,4 +1,5 @@
-package com.quickcallwidget.ui.screens
+package com.quickcallwidget.ui.screens.widgetThree
+
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -32,33 +33,34 @@ import com.quickcallwidget.data.db.TestDB
 import com.quickcallwidget.ui.ContactList
 import com.quickcallwidget.ui.navigation.Screen
 import com.quickcallwidget.ui.screens.utils.*
-import kotlinx.coroutines.*
-
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 @OptIn(DelicateCoroutinesApi::class)
 @Composable
-fun MainScreen(
+fun DetailsScreenThree(
     navController: NavController,
     myDao: MyDao,
 ) {
     val context = LocalContext.current
-    val sharedPrefs = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+    val sharedPrefs = context.getSharedPreferences("myPrefsThree", Context.MODE_PRIVATE)
 
     val phoneNumber = remember { mutableStateOf("") }
     val userName = remember { mutableStateOf("") }
-    var isClicked by remember { mutableStateOf(false) }
+    var isClickedThree by remember { mutableStateOf(false) }
 
     val widgetName = sharedPrefs.getString("Name", null)
     val widgetPhone = sharedPrefs.getString("Phone", null)
 
-    val receiver = ComponentName(context, ActionWidgetReceiver::class.java)
+    val receiver = ComponentName(context, ActionWidgetReceiverThree::class.java)
     val appWidgetManager = AppWidgetManager.getInstance(context)
     val b = Bundle()
 
     val selectedItem by remember { mutableStateOf<Contact?>(Contact("default", "default")) }
 
     if (widgetName != null) {
-        isClicked = true
+        isClickedThree = true
     }
 
     Column(
@@ -69,7 +71,7 @@ fun MainScreen(
         CustomTopBar(navController = navController)
 
         Spacer(modifier = Modifier.height(22.dp))
-
+        Text(text = "Widget three", color = Color.White)
         selectedItem?.let {
             CustomTextField(
                 widgetName = widgetName,
@@ -101,21 +103,21 @@ fun MainScreen(
                     editor
                         .putString("Name", userName.value)
                         .putString("Phone", phoneNumber.value)
-                        .putInt("WidNumber", 1)
+                        .putInt("WidNumber", 3)
                     editor.apply()
 
                     // 2. save to the room
                     GlobalScope.launch {
-                        myDao.insertItem(TestDB(0, userName.value, phoneNumber.value))
+                        myDao.insertItem(TestDB(id=3, name= userName.value, phone = phoneNumber.value))
                     }
 
                     // 3. widget created
-                    isClicked = true
+                    isClickedThree = true
 
                     // 4. add widget to the main screen Alert
                     if (appWidgetManager.isRequestPinAppWidgetSupported) {
                         val pinnedWidgetCallbackIntent =
-                            Intent(context, ActionWidgetReceiver::class.java)
+                            Intent(context, ActionWidgetReceiverThree::class.java)
                         val successCallback = PendingIntent.getBroadcast(
                             context, 0, pinnedWidgetCallbackIntent, PendingIntent.FLAG_IMMUTABLE
                         )
@@ -132,14 +134,14 @@ fun MainScreen(
             modifier = Modifier
                 .padding(20.dp)
                 .fillMaxWidth(),
-            enabled = !isClicked,
+            enabled = !isClickedThree,
             elevation = ButtonDefaults.elevation(defaultElevation = 8.dp),
             shape = RoundedCornerShape(16.dp),
             contentPadding = PaddingValues(vertical = 12.dp),
         ) {
             Row {
 
-                if (isClicked) {
+                if (isClickedThree) {
                     Icon(
                         modifier = Modifier.padding(end = 4.dp),
                         imageVector = Icons.Default.Done,
@@ -148,10 +150,10 @@ fun MainScreen(
                     )
                 }
                 Text(
-                    text = if (isClicked) stringResource(id = R.string.done) else stringResource(
+                    text = if (isClickedThree) stringResource(id = R.string.done) else stringResource(
                         id = R.string.submit
                     ),
-                    color = if (!isClicked) Color.White else Color.Black,
+                    color = if (!isClickedThree) Color.White else Color.Black,
                     fontSize = 20.sp,
                     fontFamily = fontFamily,
                     fontWeight = FontWeight.Medium,
@@ -159,7 +161,7 @@ fun MainScreen(
             }
         }
         //if contact selected not show contact list
-        if (!isClicked) {
+        if (!isClickedThree) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -175,4 +177,3 @@ fun MainScreen(
         }
     }
 }
-

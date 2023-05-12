@@ -5,10 +5,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.quickcallwidget.data.db.MyDao
+import com.quickcallwidget.ui.screens.DetailsScreenOne
 
 import com.quickcallwidget.ui.screens.HomeScreen
-import com.quickcallwidget.ui.screens.MainScreen
-import com.quickcallwidget.ui.screens.widgetTwo.MainScreenTwo
+import com.quickcallwidget.ui.screens.widgetThree.DetailsScreenThree
+import com.quickcallwidget.ui.screens.widgetTwo.DetailsScreenTwo
 
 
 @Composable
@@ -27,14 +28,20 @@ fun SetupNavGraph(
                 myDao = myDao
             )
         }
-        composable(route = Screen.MainScreen.route) {
-            MainScreen(
+        composable(route = Screen.DetailsScreenOne.route) {
+            DetailsScreenOne(
                 navController = navController,
                 myDao = myDao,
             )
         }
-        composable(route = Screen.MainScreenTwo.route) {
-            MainScreenTwo(
+        composable(route = Screen.DetailsScreenTwo.route) {
+            DetailsScreenTwo(
+                navController = navController,
+                myDao = myDao,
+            )
+        }
+        composable(route = Screen.DetailsScreenThree.route) {
+            DetailsScreenThree(
                 navController = navController,
                 myDao = myDao,
             )

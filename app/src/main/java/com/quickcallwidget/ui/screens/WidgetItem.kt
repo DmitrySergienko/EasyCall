@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.quickcallwidget.data.db.TestDB
-import com.quickcallwidget.ui.navigation.Screen
 import com.quickcallwidget.ui.screens.utils.fontFamily
 import com.quickcallwidget.ui.theme.BlueLight
 
@@ -32,7 +31,7 @@ fun WidgetItem(
             .fillMaxWidth()
             .padding(top = 10.dp, start = 12.dp, end = 12.dp, bottom = 10.dp)
             .clickable {
-                navController.navigate(Screen.MainScreen.route)
+                //navController.navigate(Screen.DetailsScreenOne.route)
             },
         backgroundColor = Color.White,
         elevation = 10.dp,
