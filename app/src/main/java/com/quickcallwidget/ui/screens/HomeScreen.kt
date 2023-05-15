@@ -71,7 +71,7 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 //in case user deleted the widget manually
-                if (sharedPrefs.getString("WidgetOneDeleted", "") == "WidgetOneDeleted") {
+                if (sharedPrefs.getString("WidgetDeleted", "") == "WidgetDeleted") {
 
                     //1. delete widget from the room
                     if(list.isNotEmpty()){

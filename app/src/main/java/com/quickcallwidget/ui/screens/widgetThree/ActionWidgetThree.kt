@@ -67,7 +67,7 @@ class LogActionCallbackThree : ActionCallback {
         parameters: ActionParameters
     ) {
         val appContext = context.applicationContext
-        val sharedPrefs = appContext.getSharedPreferences("myPrefsTwo", Context.MODE_PRIVATE)
+        val sharedPrefs = appContext.getSharedPreferences("myPrefsThree", Context.MODE_PRIVATE)
         val phoneNumber = sharedPrefs.getString("Phone", null)
 
         if (phoneNumber != null) {
@@ -87,4 +87,13 @@ class LogActionCallbackThree : ActionCallback {
 class ActionWidgetReceiverThree : GlanceAppWidgetReceiver() {
 
     override val glanceAppWidget: GlanceAppWidget = ActionWidgetThree()
+
+    override fun onDisabled(context: Context?) {
+        super.onDisabled(context)
+
+        val sharedPrefs = context?.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPrefs?.edit()
+        editor?.putString("WidgetDeleted", "WidgetDeleted")
+        editor?.apply()
+    }
 }

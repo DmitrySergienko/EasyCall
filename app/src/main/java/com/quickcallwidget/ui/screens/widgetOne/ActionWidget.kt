@@ -92,7 +92,7 @@ class ActionWidgetReceiver : GlanceAppWidgetReceiver() {
 
         val sharedPrefs = context?.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
         val editor = sharedPrefs?.edit()
-        editor?.putString("WidgetOneDeleted", "WidgetOneDeleted")
+        editor?.putString("WidgetDeleted", "WidgetDeleted")
         editor?.apply()
     }
 }
