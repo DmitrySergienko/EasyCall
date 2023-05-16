@@ -31,8 +31,8 @@ class ActionWidgetThree : GlanceAppWidget() {
     override fun Content() {
         val context = LocalContext.current
         val appContext = context.applicationContext
-        val sharedPrefs = appContext.getSharedPreferences("myPrefsThree", Context.MODE_PRIVATE)
-        val widgetName = sharedPrefs.getString("Name", null)
+        val sharedPrefs = appContext.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val widgetName = sharedPrefs.getString("NameThree", null)
         Column(
             modifier = GlanceModifier
                 .padding(8.dp)
@@ -67,8 +67,8 @@ class LogActionCallbackThree : ActionCallback {
         parameters: ActionParameters
     ) {
         val appContext = context.applicationContext
-        val sharedPrefs = appContext.getSharedPreferences("myPrefsThree", Context.MODE_PRIVATE)
-        val phoneNumber = sharedPrefs.getString("Phone", null)
+        val sharedPrefs = appContext.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val phoneNumber = sharedPrefs.getString("PhoneThree", null)
 
         if (phoneNumber != null) {
             makeCall(context, phoneNumber)
@@ -93,7 +93,7 @@ class ActionWidgetReceiverThree : GlanceAppWidgetReceiver() {
 
         val sharedPrefs = context?.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
         val editor = sharedPrefs?.edit()
-        editor?.putString("WidgetDeleted", "WidgetDeleted")
+        editor?.putInt("WidgetDeleted", 30)
         editor?.apply()
     }
 }

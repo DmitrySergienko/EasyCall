@@ -44,14 +44,14 @@ fun DetailsScreenThree(
     myDao: MyDao,
 ) {
     val context = LocalContext.current
-    val sharedPrefs = context.getSharedPreferences("myPrefsThree", Context.MODE_PRIVATE)
+    val sharedPrefs = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
 
     val phoneNumber = remember { mutableStateOf("") }
     val userName = remember { mutableStateOf("") }
     var isClickedThree by remember { mutableStateOf(false) }
 
-    val widgetName = sharedPrefs.getString("Name", null)
-    val widgetPhone = sharedPrefs.getString("Phone", null)
+    val widgetName = sharedPrefs.getString("NameThree", null)
+    val widgetPhone = sharedPrefs.getString("PhoneThree", null)
 
     val receiver = ComponentName(context, ActionWidgetReceiverThree::class.java)
     val appWidgetManager = AppWidgetManager.getInstance(context)
@@ -101,9 +101,9 @@ fun DetailsScreenThree(
                     // 1. save in share preferences
                     val editor = sharedPrefs.edit()
                     editor
-                        .putString("Name", userName.value)
-                        .putString("Phone", phoneNumber.value)
-                        .putInt("WidNumber", 3)
+                        .putString("NameThree", userName.value)
+                        .putString("PhoneThree", phoneNumber.value)
+                        .putInt("WidNumber", 4)
                     editor.apply()
 
                     // 2. save to the room

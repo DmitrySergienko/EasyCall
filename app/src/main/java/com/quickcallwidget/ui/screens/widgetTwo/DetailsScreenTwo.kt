@@ -6,7 +6,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -45,14 +44,14 @@ fun DetailsScreenTwo(
     myDao: MyDao,
 ) {
     val context = LocalContext.current
-    val sharedPrefs = context.getSharedPreferences("myPrefsTwo", Context.MODE_PRIVATE)
+    val sharedPrefs = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
 
     val phoneNumber = remember { mutableStateOf("") }
     val userName = remember { mutableStateOf("") }
     var isClickedTwo by remember { mutableStateOf(false) }
 
-    val widgetName = sharedPrefs.getString("Name", null)
-    val widgetPhone = sharedPrefs.getString("Phone", null)
+    val widgetName = sharedPrefs.getString("NameTwo", null)
+    val widgetPhone = sharedPrefs.getString("PhoneTwo", null)
 
     val receiver = ComponentName(context, ActionWidgetReceiverTwo::class.java)
     val appWidgetManager = AppWidgetManager.getInstance(context)
@@ -102,11 +101,10 @@ fun DetailsScreenTwo(
                     // 1. save in share preferences
                     val editor = sharedPrefs.edit()
                     editor
-                        .putString("Name", userName.value)
-                        .putString("Phone", phoneNumber.value)
+                        .putString("NameTwo", userName.value)
+                        .putString("PhoneTwo", phoneNumber.value)
                         .putInt("WidNumber", 3)
                     editor.apply()
-                    Log.d("VVV", "WidNumber = ${sharedPrefs.getInt("WidNumber",10)}")
 
                     // 2. save to the room
                     GlobalScope.launch {

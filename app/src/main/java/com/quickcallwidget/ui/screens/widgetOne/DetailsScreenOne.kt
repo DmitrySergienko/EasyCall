@@ -6,7 +6,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -105,7 +104,7 @@ fun DetailsScreenOne(
                         .putString("Phone", phoneNumber.value)
                         .putInt("WidNumber", 2)
                     editor.apply()
-                    Log.d("VVV", "WidNumber = ${sharedPrefs.getInt("WidNumber",10)}")
+
                     // 2. save in the room
                     GlobalScope.launch {
                         myDao.insertItem(TestDB(id= 1, name = userName.value, phone = phoneNumber.value))
