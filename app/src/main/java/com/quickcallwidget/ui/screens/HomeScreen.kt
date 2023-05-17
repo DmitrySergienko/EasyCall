@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -26,10 +25,8 @@ import com.quickcallwidget.data.db.MyDao
 import com.quickcallwidget.data.db.TestDB
 import com.quickcallwidget.ui.navigation.Screen
 import com.quickcallwidget.ui.screens.utils.CycleButtonWithPlus
+import com.quickcallwidget.ui.screens.utils.DeleteWidget
 import com.quickcallwidget.ui.screens.utils.fontFamily
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
@@ -74,7 +71,6 @@ fun HomeScreen(
                 if (sharedPrefs.getInt("WidgetDeleted", 0) != 0) {
 
                     when (sharedPrefs.getInt("WidgetDeleted", 0)) {
-
                         10 ->{
                             Toast.makeText(context, "Delete widget 1", Toast.LENGTH_SHORT).show()
                             DeleteWidget(
@@ -83,7 +79,8 @@ fun HomeScreen(
                                 list = list,
                                 wName = "Name",
                                 wPhone = "Phone",
-                                wNumber = 1
+                                wNumber = 1,
+                                deletedWidget = 1
                             )}
                         20 ->{
                             Toast.makeText(context, "Delete widget 2", Toast.LENGTH_SHORT).show()
@@ -95,6 +92,7 @@ fun HomeScreen(
                                     wName = "NameTwo",
                                     wPhone = "PhoneTwo",
                                     wNumber = 2,
+                                    deletedWidget = 2
                                     )}else{
                                 DeleteWidget(
                                     navController = navController,
@@ -103,6 +101,7 @@ fun HomeScreen(
                                     wName = "NameTwo",
                                     wPhone = "PhoneTwo",
                                     wNumber = 1,
+                                    deletedWidget = 2
                                     )}
                             }
                         30 ->{
@@ -115,6 +114,7 @@ fun HomeScreen(
                                         wName = "NameThree",
                                         wPhone = "PhoneThree",
                                         wNumber = 1,
+                                        deletedWidget = 3
                                     )}
                                 2->{Toast.makeText(context, "Delete widget 3", Toast.LENGTH_SHORT).show()
                                     DeleteWidget(
@@ -124,6 +124,7 @@ fun HomeScreen(
                                         wName = "NameThree",
                                         wPhone = "PhoneThree",
                                         wNumber = 2,
+                                        deletedWidget = 3
                                     )}
                                 3->{Toast.makeText(context, "Delete widget 3", Toast.LENGTH_SHORT).show()
                                     DeleteWidget(
@@ -133,6 +134,7 @@ fun HomeScreen(
                                         wName = "NameThree",
                                         wPhone = "PhoneThree",
                                         wNumber = 3,
+                                        deletedWidget = 3
                                     )}
                             }
                         }
@@ -153,66 +155,29 @@ fun HomeScreen(
                         }
                     }
                 }
+                if (widNumber != 4) {
+                    CycleButtonWithPlus {
+                        when (widNumber) {
+                            1 -> navController.navigate(Screen.DetailsScreenOne.route)
+                            2 -> navController.navigate(Screen.DetailsScreenTwo.route)
+                            3 -> navController.navigate(Screen.DetailsScreenThree.route)
 
-                CycleButtonWithPlus {
-
-                    when (widNumber) {
-
-                        1 -> navController.navigate(Screen.DetailsScreenOne.route)
-                        2 -> navController.navigate(Screen.DetailsScreenTwo.route)
-                        3 -> navController.navigate(Screen.DetailsScreenThree.route)
-                        4 -> Toast.makeText(context, "Maximum 3 widgets created", Toast.LENGTH_SHORT).show()
-
-                        else -> {
-                            navController.navigate(Screen.DetailsScreenOne.route)
+                            else -> {
+                                navController.navigate(Screen.DetailsScreenOne.route)
+                            }
                         }
                     }
+                }else{
+                    Text(
+                        text = stringResource(id = R.string.max),
+                        color = Color.White,
+                        fontFamily = fontFamily,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Black,
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
-        }
-    }
-}
-@OptIn(DelicateCoroutinesApi::class)
-@Composable
-fun DeleteWidget(
-    navController: NavController,
-    myDao: MyDao,
-    list: MutableList<TestDB>,
-    wName: String,
-    wPhone: String,
-    wNumber: Int
-){
-    val context = LocalContext.current
-    val sharedPrefs = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
-
-    //1. delete widget from the room
-    if (list.isNotEmpty()) {
-        // Log.d("VVV", "HomeScreen() list: $list")
-        val item = list.first()
-        LaunchedEffect(true) {
-            GlobalScope.launch {
-                myDao.deleteItem(item)
-            }
-        }
-        // 2. clean share preferences
-        val editor = sharedPrefs.edit()
-        editor.putString(wName, null)
-            .putString(wPhone, null)
-            .putInt("WidNumber", wNumber)
-            .putInt("WidgetDeleted", 0)
-        editor.apply()
-    }
-
-
-    LazyColumn(
-        contentPadding = PaddingValues(bottom = 20.dp),
-    )
-    {
-        items(list) { contact ->
-            WidgetItem(
-                contact = contact,
-                navController = navController
-            )
         }
     }
 }

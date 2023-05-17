@@ -37,5 +37,6 @@
     <string name="confirm">Подтвердить сохранение: </string>
     <string name="phone_">Номер контакта: </string>
     <string name="widget_list">Добавить контакт на экран телефона</string>
+    <string name="max">Вы сздали 3 виджета </string>
 
 </resources>
