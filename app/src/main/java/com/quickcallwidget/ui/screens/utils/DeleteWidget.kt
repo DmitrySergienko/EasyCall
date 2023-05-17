@@ -1,7 +1,6 @@
 package com.quickcallwidget.ui.screens.utils
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -42,11 +41,11 @@ fun DeleteWidget(
                 if (findItemId != null) {
                     myDao.deleteItem(findItemId)
                 }
-
+/*
                 Log.d("VVV", " findByName = $findItemId")
                 Log.d("VVV", " first = ${list.first()}")
                 Log.d("VVV", " last = ${list.last()}")
-                Log.d("VVV", " list = $list")
+                Log.d("VVV", " list = $list")*/
             }
         }
         // 2. clean share preferences
