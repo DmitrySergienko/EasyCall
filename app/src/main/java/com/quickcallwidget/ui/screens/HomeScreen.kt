@@ -172,7 +172,16 @@ fun HomeScreen(
                         text = stringResource(id = R.string.max),
                         color = Color.White,
                         fontFamily = fontFamily,
-                        fontSize = 24.sp,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Black,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Text(
+                        text = stringResource(id = R.string.info_remove_widget),
+                        color = Color.White,
+                        fontFamily = fontFamily,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Black,
                         textAlign = TextAlign.Center
                     )

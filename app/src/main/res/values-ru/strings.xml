@@ -37,6 +37,8 @@
     <string name="confirm">Подтвердить сохранение: </string>
     <string name="phone_">Номер контакта: </string>
     <string name="widget_list">Добавить контакт на экран телефона</string>
-    <string name="max">Вы сздали 3 виджета </string>
+    <string name="max">У вас создано максимальное количество виджетов - 3 </string>
+    <string name="info_remove_widget">"
+Для обновления виджета удалите один из созданных ранее виджетов с главного экрана, перетащив его в корзину при нажатии и удерживании.</string>
 
 </resources>

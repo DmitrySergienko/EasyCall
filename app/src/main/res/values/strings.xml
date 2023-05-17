@@ -36,5 +36,6 @@
     <string name="phone_">Phone: </string>
     <string name="widget_list">Add contact to the phone screen</string>
     <string name="max">Maximum 3 widgets created</string>
+    <string name="info_remove_widget">To update the widget, delete one of the previously created widgets from the main screen by dragging and holding it to the trash.</string>
 
 </resources>
