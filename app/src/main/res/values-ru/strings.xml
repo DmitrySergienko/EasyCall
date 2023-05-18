@@ -31,7 +31,7 @@
 
     <string name="done">Виджет создан</string>
     <string name="submit">Подтвердить</string>
-    <string name="name_max">Имя (максимум 15 символов)</string>
+    <string name="name_max">Имя</string>
     <string name="phone">Номер телефона</string>
     <string name="complete">Заполните оба поля!</string>
     <string name="confirm">Подтвердить сохранение: </string>

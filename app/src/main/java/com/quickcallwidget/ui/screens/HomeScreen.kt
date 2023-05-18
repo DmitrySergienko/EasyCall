@@ -71,8 +71,7 @@ fun HomeScreen(
                 if (sharedPrefs.getInt("WidgetDeleted", 0) != 0) {
 
                     when (sharedPrefs.getInt("WidgetDeleted", 0)) {
-                        10 ->{
-                            Toast.makeText(context, "Delete widget 1", Toast.LENGTH_SHORT).show()
+                        10 -> {
                             DeleteWidget(
                                 navController = navController,
                                 myDao = myDao,
@@ -81,10 +80,10 @@ fun HomeScreen(
                                 wPhone = "Phone",
                                 wNumber = 1,
                                 deletedWidget = 1
-                            )}
-                        20 ->{
-                            Toast.makeText(context, "Delete widget 2", Toast.LENGTH_SHORT).show()
-                            if (widNumber != 1){
+                            )
+                        }
+                        20 -> {
+                            if (widNumber != 1) {
                                 DeleteWidget(
                                     navController = navController,
                                     myDao = myDao,
@@ -93,7 +92,8 @@ fun HomeScreen(
                                     wPhone = "PhoneTwo",
                                     wNumber = 2,
                                     deletedWidget = 2
-                                    )}else{
+                                )
+                            } else {
                                 DeleteWidget(
                                     navController = navController,
                                     myDao = myDao,
@@ -102,11 +102,12 @@ fun HomeScreen(
                                     wPhone = "PhoneTwo",
                                     wNumber = 1,
                                     deletedWidget = 2
-                                    )}
+                                )
                             }
-                        30 ->{
-                            when(widNumber){
-                                1->{Toast.makeText(context, "Delete widget 3", Toast.LENGTH_SHORT).show()
+                        }
+                        30 -> {
+                            when (widNumber) {
+                                1 -> {
                                     DeleteWidget(
                                         navController = navController,
                                         myDao = myDao,
@@ -115,8 +116,9 @@ fun HomeScreen(
                                         wPhone = "PhoneThree",
                                         wNumber = 1,
                                         deletedWidget = 3
-                                    )}
-                                2->{Toast.makeText(context, "Delete widget 3", Toast.LENGTH_SHORT).show()
+                                    )
+                                }
+                                2 -> {
                                     DeleteWidget(
                                         navController = navController,
                                         myDao = myDao,
@@ -125,8 +127,9 @@ fun HomeScreen(
                                         wPhone = "PhoneThree",
                                         wNumber = 2,
                                         deletedWidget = 3
-                                    )}
-                                3->{Toast.makeText(context, "Delete widget 3", Toast.LENGTH_SHORT).show()
+                                    )
+                                }
+                                3 -> {
                                     DeleteWidget(
                                         navController = navController,
                                         myDao = myDao,
@@ -135,15 +138,16 @@ fun HomeScreen(
                                         wPhone = "PhoneThree",
                                         wNumber = 3,
                                         deletedWidget = 3
-                                    )}
+                                    )
+                                }
                             }
                         }
                         else -> {
-                            Toast.makeText(context, "No widget available", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "No widget available", Toast.LENGTH_SHORT)
+                                .show()
                         }
                     }
-                }
-                else {
+                } else {
                     LazyColumn(
                         contentPadding = PaddingValues(bottom = 20.dp),
                     ) {
@@ -167,7 +171,7 @@ fun HomeScreen(
                             }
                         }
                     }
-                }else{
+                } else {
                     Text(
                         text = stringResource(id = R.string.max),
                         color = Color.White,

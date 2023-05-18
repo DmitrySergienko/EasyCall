@@ -1,7 +1,6 @@
 package com.quickcallwidget.ui.screens
 
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -31,10 +30,7 @@ fun WidgetItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 10.dp, start = 12.dp, end = 12.dp, bottom = 10.dp)
-            .border(1.dp, color = Color.White, shape = RoundedCornerShape(16.dp))
-            .clickable {
-                //navController.navigate(Screen.DetailsScreenOne.route)
-            },
+           ,
         backgroundColor = Color.Transparent,
 
         elevation = 10.dp,
