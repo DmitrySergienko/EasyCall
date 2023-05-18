@@ -71,7 +71,7 @@ fun DetailsScreenThree(
         CustomTopBar(navController = navController)
 
         Spacer(modifier = Modifier.height(22.dp))
-        Text(text = "Widget three", color = Color.White)
+
         selectedItem?.let {
             CustomTextField(
                 widgetName = widgetName,

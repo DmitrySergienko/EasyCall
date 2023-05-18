@@ -71,7 +71,7 @@ fun DetailsScreenTwo(
         CustomTopBar(navController = navController)
 
         Spacer(modifier = Modifier.height(22.dp))
-        Text(text = "Widget two", color = Color.White)
+
         selectedItem?.let {
             CustomTextField(
                 widgetName = widgetName,
